@@ -1,0 +1,95 @@
+/* setting background color and web page margin */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    color: #333;
+  }
+  
+  /* setting container, making cintent stay in the middle */
+  .container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 40px;
+  }
+  
+  /* Setting title */
+  h1, h2 {
+    text-align: center;
+    color: #444;
+  }
+  
+  h2 {
+    margin-top: 40px;
+    font-size: 1.5em;
+  }
+  
+  /* List of items */
+  .items-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-bottom: 20px;
+  }
+  
+  .items-list div {
+    background-color: #cbcbcb;
+    padding: 15px;
+    margin: 10px;
+    border-radius: 8px;
+    width: 200px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .items-list p {
+    font-size: 1.1em;
+    margin: 0;
+  }
+  
+  button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 100%;
+    font-size: 1.1em;
+  }
+  
+  button:hover {
+    background-color: #218838;
+  }
+  
+  /* cart list */
+  .cart-list {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #fafafa;
+    border-radius: 8px;
+    min-height: 100px;
+  }
+  
+  .cart-list p {
+    font-size: 1.1em;
+    margin: 5px 0;
+  }
+  
+  /* empty cart button */
+  .clear-cart {
+    color: #d9534f;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.2em;
+    text-decoration: underline;
+  }
+  
+  .clear-cart:hover {
+    color: #c9302c;
+  }
+  
