@@ -1,95 +1,176 @@
 /* setting background color and web page margin */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-    color: #333;
-  }
-  
-  /* setting container, making cintent stay in the middle */
-  .container {
-    width: 80%;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-top: 40px;
-  }
-  
-  /* Setting title */
-  h1, h2 {
-    text-align: center;
-    color: #444;
-  }
-  
-  h2 {
-    margin-top: 40px;
-    font-size: 1.5em;
-  }
-  
-  /* List of items */
-  .items-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    margin-bottom: 20px;
-  }
-  
-  .items-list div {
-    background-color: #cbcbcb;
-    padding: 15px;
-    margin: 10px;
-    border-radius: 8px;
-    width: 200px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .items-list p {
-    font-size: 1.1em;
-    margin: 0;
-  }
-  
-  button {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    border-radius: 5px;
-    width: 100%;
-    font-size: 1.1em;
-  }
-  
-  button:hover {
-    background-color: #218838;
-  }
-  
-  /* cart list */
-  .cart-list {
-    margin-top: 20px;
-    padding: 10px;
-    background-color: #fafafa;
-    border-radius: 8px;
-    min-height: 100px;
-  }
-  
-  .cart-list p {
-    font-size: 1.1em;
-    margin: 5px 0;
-  }
-  
-  /* empty cart button */
-  .clear-cart {
-    color: #d9534f;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 1.2em;
-    text-decoration: underline;
-  }
-  
-  .clear-cart:hover {
-    color: #c9302c;
-  }
+  font-family: Arial, sans-serif;
+  background-image: url('https://img.freepik.com/free-vector/character-playing-videogame-concept_52683-37588.jpg?t=st=1745620204~exp=1745623804~hmac=835b4ac062cc29f0e165277ff4268305d907fb387c1688d14fd936074f2da8c1&w=826'); /* 這裡填入你的圖片 URL */
+  background-size: cover; /* 讓背景圖片覆蓋整個背景 */
+  background-position: center; /* 讓圖片置中 */
+  margin: 0;
+  padding: 0;
+  color: #333;
+  height: 100vh; /* 讓頁面高度為視窗高度 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* setting container, making content stay in the middle */
+.container {
+  width: 80%;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.9); /* 使背景略微透明，讓背景圖片仍可見 */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 40px;
+}
+
+/* Setting title */
+h1, h2 {
+  text-align: center;
+  color: #444;
+}
+
+h2 {
+  margin-top: 40px;
+  font-size: 1.5em;
+}
+
+/* List of items */
+.items-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.items-list div {
+  background-color: #cbcbcb;
+  padding: 15px;
+  margin: 10px;
+  border-radius: 8px;
+  width: 200px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.items-list p {
+  font-size: 1.1em;
+  margin: 0;
+}
+
+button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 100%;
+  font-size: 1.1em;
+}
+
+button:hover {
+  background-color: #218838;
+}
+
+/* cart list */
+.cart-list {
+  margin-top: 20px;
+  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  background-color: #fafafa;
+  border-radius: 8px;
+  min-height: 100px;
+}
+
+/* each cart item styled like a card */
+.cart-item {
+  background-color: #e6e6e6;
+  padding: 15px;
+  border-radius: 8px;
+  width: 200px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* remove button in cart item */
+.cart-item button.remove-btn {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  font-size: 0.9em;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.cart-item button.remove-btn:hover {
+  background-color: #c82333;
+}
+
+/* small circle button for quantity control */
+.circle-btn {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 50%;
+  font-size: 1.5em;
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  text-align: center;
+  margin: 0 10px;
+}
+
+.circle-btn:hover {
+  background-color: #218838;
+}
+
+/* quantity display style */
+.qty-display {
+  font-size: 1.2em;
+  margin: 0 10px;
+}
+
+/* Style for the cart item name and price */
+.cart-item p {
+  font-size: 1.1em;
+  margin: 0;
+  flex-grow: 1;
+}
+
+/* Cart total text */
+#total {
+  font-weight: bold;
+  margin-top: 20px;
+  text-align: center;
+  font-size: 1.5em;
+  color: #444;
+}
+
+/* Empty Cart Button */
+button.empty-cart {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1.2em;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 100%;
+  margin-top: 15px;
+}
+
+button.empty-cart:hover {
+  background-color: #c82333;
+}
   
