@@ -2,30 +2,52 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)  # Add this line to allow the frontend to access the API
+CORS(app)
+
 cart = []
 
-# Get or add shopping cart items
 @app.route('/cart', methods=['GET', 'POST', 'DELETE'])
 def handle_cart():
     if request.method == 'POST':
         item = request.json
-        cart.append(item)
+        existing_item = next((i for i in cart if i['name'] == item['name']), None)
+        if existing_item:
+            existing_item['quantity'] += 1
+        else:
+            item['quantity'] = 1
+            cart.append(item)
         return jsonify({'message': 'Item added to cart'}), 201
-    
+
     elif request.method == 'DELETE':
         cart.clear()
         return jsonify({'message': 'Cart cleared'}), 200
-    
+
     return jsonify(cart)
 
-# Delete a single item from the shopping cart by index.
-@app.route('/cart/<int:index>', methods=['DELETE'])
-def delete_item(index):
-    if 0 <= index < len(cart):
-        removed_item = cart.pop(index)
-        return jsonify({'message': 'Item removed', 'item': removed_item}), 200
-    return jsonify({'error': 'Invalid index'}), 400
+@app.route('/cart/update', methods=['POST'])
+def update_quantity():
+    data = request.json
+    name = data['name']
+    price = data['price']
+    change = data['change']
+
+    item = next((i for i in cart if i['name'] == name), None)
+
+    if item:
+        item['quantity'] += change
+        if item['quantity'] <= 0:
+            cart.remove(item)
+        return jsonify({'message': 'Quantity updated', 'item': item}), 200
+    elif change > 0:
+        cart.append({'name': name, 'price': price, 'quantity': change})
+        return jsonify({'message': 'New item added', 'item': name}), 201
+    else:
+        return jsonify({'error': 'Item not found'}), 404
+
+@app.route('/cart/clear', methods=['POST'])
+def clear_cart():
+    cart.clear()
+    return jsonify({'message': 'Cart cleared'}), 200
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
