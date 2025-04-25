@@ -2,12 +2,12 @@
 body {
   font-family: Arial, sans-serif;
   background-image: url('https://img.freepik.com/free-vector/character-playing-videogame-concept_52683-37588.jpg?t=st=1745620204~exp=1745623804~hmac=835b4ac062cc29f0e165277ff4268305d907fb387c1688d14fd936074f2da8c1&w=826'); /* 這裡填入你的圖片 URL */
-  background-size: cover; /* 讓背景圖片覆蓋整個背景 */
-  background-position: center; /* 讓圖片置中 */
+  background-size: cover; /* Make the background image cover the entire background */
+  background-position: center; /* center the graph */
   margin: 0;
   padding: 0;
   color: #333;
-  height: 100vh; /* 讓頁面高度為視窗高度 */
+  height: 100vh; /* Make the page height equal to the viewport height */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -18,7 +18,7 @@ body {
   width: 80%;
   margin: 0 auto;
   padding: 20px;
-  background-color: rgba(255, 255, 255, 0.9); /* 使背景略微透明，讓背景圖片仍可見 */
+  background-color: rgba(255, 255, 255, 0.9); /* Make the background slightly transparent so the background image remains visible */
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin-top: 40px;
