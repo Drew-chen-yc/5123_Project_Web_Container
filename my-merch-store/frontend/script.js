@@ -9,28 +9,23 @@ fetch('http://localhost:5001/items')
       p.textContent = `${item.name} - $${item.price}`;
       const btn = document.createElement('button');
       btn.textContent = 'Add to Cart';
-      btn.onclick = () => addToCart(item);
+      btn.onclick = () => updateItemQuantity(item, 1); // ← 改成用 updateItemQuantity
       div.appendChild(p);
       div.appendChild(btn);
       itemsDiv.appendChild(div);
     });
   });
 
-// add items to cart
-function addToCart(item) {
-  fetch('http://localhost:5000/cart', {
+// 更新商品數量：+1 或 -1
+function updateItemQuantity(item, change) {
+  fetch('http://localhost:5000/cart/update', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(item)
-  }).then(() => {
-    alert(`${item.name} added to cart!`);
-    showCart();
-  });
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: item.name, price: item.price, change })
+  }).then(() => showCart());
 }
 
-// show the cart
+// 顯示購物車
 function showCart() {
   fetch('http://localhost:5000/cart')
     .then(response => response.json())
@@ -38,40 +33,57 @@ function showCart() {
       const cartDiv = document.getElementById('cart');
       cartDiv.innerHTML = '';
 
-      cart.forEach((item, index) => {
-        const p = document.createElement('p');
-        p.textContent = `${item.name} - $${item.price} `;
-        
-        // adding remove button
-        const delBtn = document.createElement('button');
-        delBtn.textContent = 'Remove form cart';
-        delBtn.onclick = () => deleteItem(index);
+      let total = 0;
 
-        p.appendChild(delBtn);
-        cartDiv.appendChild(p);
+      cart.forEach(item => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'cart-item';
+
+        const namePrice = document.createElement('span');
+        namePrice.textContent = `${item.name} - $${item.price} x `;
+
+        const minusBtn = document.createElement('button');
+        minusBtn.className = 'circle-btn';
+        minusBtn.textContent = '-';
+        minusBtn.onclick = () => updateItemQuantity(item, -1);
+
+        const qtyDisplay = document.createElement('span');
+        qtyDisplay.className = 'qty-display';
+        qtyDisplay.textContent = item.quantity;
+
+        const plusBtn = document.createElement('button');
+        plusBtn.className = 'circle-btn';
+        plusBtn.textContent = '+';
+        plusBtn.onclick = () => updateItemQuantity(item, 1);
+
+        itemDiv.appendChild(namePrice);
+        itemDiv.appendChild(minusBtn);
+        itemDiv.appendChild(qtyDisplay);
+        itemDiv.appendChild(plusBtn);
+
+        cartDiv.appendChild(itemDiv);
+
+        total += item.price * item.quantity;
       });
 
-      // showing "Empty Cart" button
+      const totalP = document.createElement('p');
+      totalP.id = 'total';
+      totalP.style.fontWeight = 'bold';
+      totalP.style.marginTop = '15px';
+      totalP.textContent = `Total: $${total.toFixed(2)}`;
+      cartDiv.appendChild(totalP);
+
       const clearBtn = document.createElement('button');
       clearBtn.textContent = 'Empty Cart';
-      clearBtn.onclick = clearCart;
+      clearBtn.style.marginTop = '10px';
+      clearBtn.onclick = () => {
+        fetch('http://localhost:5000/cart/clear', {
+          method: 'POST'
+        }).then(() => showCart());
+      };
       cartDiv.appendChild(clearBtn);
     });
 }
 
-// remove single item
-function deleteItem(index) {
-  fetch(`http://localhost:5000/cart/${index}`, {
-    method: 'DELETE'
-  }).then(() => showCart());
-}
-
-// empty cart
-function clearCart() {
-  fetch('http://localhost:5000/cart', {
-    method: 'DELETE'
-  }).then(() => showCart());
-}
-
-// show cart as default setting
+// 初始載入購物車
 showCart();
