@@ -3,7 +3,7 @@ body {
   font-family: Arial, sans-serif;
   background-image: url('https://img.freepik.com/free-vector/character-playing-videogame-concept_52683-37588.jpg?t=st=1745620204~exp=1745623804~hmac=835b4ac062cc29f0e165277ff4268305d907fb387c1688d14fd936074f2da8c1&w=826'); /* 這裡填入你的圖片 URL */
   background-size: cover; /* Make the background image cover the entire background */
-  background-position: center; /* center the graph */
+  background-position: center; /* Center the pic */
   margin: 0;
   padding: 0;
   color: #333;
@@ -50,6 +50,14 @@ h2 {
   border-radius: 8px;
   width: 200px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.items-list img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 10px;
 }
 
 .items-list p {
@@ -173,4 +181,6 @@ button.empty-cart {
 button.empty-cart:hover {
   background-color: #c82333;
 }
-  
+button.empty-cart:hover {
+  background-color: #c82333;
+}  
