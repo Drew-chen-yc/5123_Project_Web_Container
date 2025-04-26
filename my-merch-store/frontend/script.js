@@ -9,7 +9,7 @@ fetch('http://localhost:5001/items')
 
       // Create and add the product image
       const img = document.createElement('img');
-      img.src = item.image;  // Use the image URL from the response
+      img.src = "http://localhost:5001/static/images/" + item.picture;  // Use the image URL from the response
       img.alt = item.name;
       img.className = 'product-image';
       div.appendChild(img);
