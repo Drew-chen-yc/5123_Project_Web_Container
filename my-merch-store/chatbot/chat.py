@@ -53,8 +53,8 @@ def home():
     return render_template("index.html")
 @app.route("/get")
 def get_bot_response():
-    user_request = prompt_input()
+    user_request = request.args.get("msg")
     output = get_prompt_from_nlp(user_request)
-    print(output)
+    return output
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5002)
