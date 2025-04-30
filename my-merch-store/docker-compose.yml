@@ -6,6 +6,11 @@ services:
     ports:
       - "5000:5000"
 
+  chatbot:
+    build: ./chatbot
+    ports:
+      - "5002:5002"
+
   mockdata:
     build: ./mockdata
     ports:
