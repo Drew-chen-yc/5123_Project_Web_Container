@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Game Reviews</title>
+  <style>
+    .game-container {
+      border-bottom: 1px solid #ccc;
+      padding: 10px;
+    }
+
+    .game-title {
+      cursor: pointer;
+      font-weight: bold;
+      color: blue;
+    }
+
+    .game-rating {
+      display: inline-block;
+      margin-left: 10px;
+      color: darkorange;
+    }
+
+    .review-box {
+      margin-top: 5px;
+      display: none;
+    }
+
+    .sort-btn {
+      margin-bottom: 20px;
+      padding: 5px 10px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+    }
+
+    .sort-btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>Game Reviews</h1>
+  <button class="sort-btn" onclick="sortByRating()">Sort by Rating <span id="sort-icon">↓</span></button>
+  <div id="reviews"></div>
+
+  <script>
+    let reviewsData = []; // 用來存原始資料
+    let isAscending = false; // 預設為降冪排序
+
+    // 抓資料
+    fetch('http://localhost:5001/reviews')
+      .then(response => response.json())
+      .then(data => {
+        reviewsData = data;
+        renderReviews(reviewsData); // 初次渲染
+      });
+
+    // 渲染畫面
+    function renderReviews(data) {
+      const reviewsDiv = document.getElementById('reviews');
+      reviewsDiv.innerHTML = ''; // 清空內容
+
+      data.forEach(item => {
+        const container = document.createElement('div');
+        container.className = 'game-container';
+
+        const title = document.createElement('div');
+        title.textContent = item.title;
+        title.className = 'game-title';
+
+        const rating = document.createElement('span');
+        rating.textContent = `(Rating: ${item.rating})`;
+        rating.className = 'game-rating';
+
+        const review = document.createElement('div');
+        review.textContent = item.review;
+        review.className = 'review-box';
+
+        // 點擊標題切換 review 顯示
+        title.addEventListener('click', () => {
+          review.style.display = (review.style.display === 'block') ? 'none' : 'block';
+        });
+
+        container.appendChild(title);
+        container.appendChild(rating);
+        container.appendChild(review);
+        reviewsDiv.appendChild(container);
+      });
+    }
+
+    // 排序函式
+    function sortByRating() {
+      isAscending = !isAscending; // 切換排序方向
+      const sorted = [...reviewsData].sort((a, b) => {
+        return isAscending ? a.rating - b.rating : b.rating - a.rating;
+      });
+      renderReviews(sorted);
+
+      // 更新排序圖示
+      const sortIcon = document.getElementById('sort-icon');
+      sortIcon.textContent = isAscending ? '↑' : '↓'; // 顯示升冪或降冪箭頭
+    }
+  </script>
+</body>
+</html>
