@@ -6,7 +6,7 @@ services:
     environment:
       POSTGRES_USER: storefront
       POSTGRES_PASSWORD: 12345
-      POSTGRES_DB: MerchDB
+      POSTGRES_DB: GamezoneDB
     ports:
       - "5432:5432"
     volumes:
