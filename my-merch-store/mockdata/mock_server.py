@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request, redirect
 from flask_cors import CORS
-from flask_sqlalchemy  import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 
@@ -10,7 +10,7 @@ CORS(app)  # Allowing CORS (for cross container execution)
 # DEFINE THE DATABASE CREDENTIALS
 user = 'storefront'
 password = '12345'
-host = 'localhost'
+host = 'db'
 port = 5432
 database = 'MerchDB'
 
@@ -47,7 +47,6 @@ def items():
         })
 
     return jsonify(merch_list)
-
 
 
 if __name__ == '__main__':
