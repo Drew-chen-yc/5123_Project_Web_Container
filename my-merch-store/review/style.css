@@ -1,47 +1,191 @@
-/* Game title */
+/* Top navigation bar */
+.top-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #333;
+  padding: 10px 24px 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 999;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+}
+
+.top-nav-left {
+  display: flex;
+  align-items: center;
+}
+
+.top-nav-right {
+  display: flex;
+  align-items: center;
+}
+
+.top-nav-left img {
+  height: 40px;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
+.top-nav-left h1 {
+  color: white;
+  font-size: 24px;
+  margin: 0;
+}
+
+.top-nav a {
+  color: white;
+  font-size: 20px;
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+  margin-left: 10px;
+}
+
+.top-nav .merch-link {
+  background-color: orange;
+}
+
+.top-nav .home-link {
+  background-color: #4CAF50;
+}
+
+.top-nav a:hover {
+  background-color: #555;
+}
+
+/* Add spacing for fixed top bar */
+body {
+  padding-top: 80px;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+/* Game Container */
+.game-container {
+  border: 2px solid #ddd;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fdfdfd;
+  transition: transform 0.2s ease;
+}
+.game-container:hover {
+  transform: scale(1.01);
+  box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Game Title */
 .game-title {
-    cursor: pointer;
-    font-weight: bold;
-    margin-top: 10px;
-    color: blue;
-  }
-  
-  /* Review box */
-  .review-box {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-top: 5px;
-    display: none;
-  }
-  
-  /* Review item */
-  .review-item {
-    margin-bottom: 10px;
-  }
-  
-  /* Popup styles */
-  .popup {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    padding: 20px;
-    border: 1px solid black;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-    z-index: 1000;
-  }
-  
-  /* Popup button */
-  .popup button {
-    padding: 6px 12px;
-    font-size: 14px;
-    margin-top: 10px;
-  }
-  
-  .popup .close-btn {
-    background-color: red;
-    color: white;
-    border: none;
-  }
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #4a00e0; /* Deep purple */
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+/* Game Rating */
+.game-rating {
+  display: inline-block;
+  margin-left: 10px;
+  font-size: 0.95rem;
+  color: darkorange;
+}
+
+/* Review Box */
+.review-box {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-top: 10px;
+  display: none;
+  line-height: 1.5;
+}
+
+/* Review Item */
+.review-item {
+  margin-bottom: 10px;
+}
+
+/* Sort Button */
+.sort-btn {
+  margin-bottom: 20px;
+  padding: 5px 10px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+}
+.sort-btn:hover {
+  background-color: #0056b3;
+}
+
+/* Popup Styles */
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border: 1px solid black;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+}
+
+/* Popup Button */
+.popup button {
+  padding: 6px 12px;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.popup .close-btn {
+  background-color: red;
+  color: white;
+  border: none;
+}
+
+/* Rating Star */
+.rating-star {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background: gold;
+  clip-path: polygon(
+    50% 0%, 61% 35%, 98% 35%, 68% 57%,
+    79% 91%, 50% 70%, 21% 91%, 32% 57%,
+    2% 35%, 39% 35%
+  );
+  text-align: center;
+  line-height: 40px;
+  font-weight: bold;
+  color: purple;
+  margin-left: 10px;
+  font-family: Arial, sans-serif;
+}
+
+.rating-star {
+  position: relative;
+  text-align: center;
+  line-height: 40px;
+  font-size: 14px;
+  overflow: hidden;
+}
+
+.rating-star span {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  top: 0;
+  left: 0;
+  line-height: 40px;
+}
   
