@@ -48,21 +48,21 @@
   <div id="reviews"></div>
 
   <script>
-    let reviewsData = []; // 用來存原始資料
-    let isAscending = false; // 預設為降冪排序
+    let reviewsData = []; // stored original data
+    let isAscending = false; // default for ascending
 
-    // 抓資料
+    // fetch data
     fetch('http://localhost:5001/reviews')
       .then(response => response.json())
       .then(data => {
         reviewsData = data;
-        renderReviews(reviewsData); // 初次渲染
+        renderReviews(reviewsData); // first render
       });
 
-    // 渲染畫面
+    // render view
     function renderReviews(data) {
       const reviewsDiv = document.getElementById('reviews');
-      reviewsDiv.innerHTML = ''; // 清空內容
+      reviewsDiv.innerHTML = ''; // clean content
 
       data.forEach(item => {
         const container = document.createElement('div');
@@ -80,7 +80,7 @@
         review.textContent = item.review;
         review.className = 'review-box';
 
-        // 點擊標題切換 review 顯示
+        // click hte title and change review display
         title.addEventListener('click', () => {
           review.style.display = (review.style.display === 'block') ? 'none' : 'block';
         });
@@ -92,17 +92,17 @@
       });
     }
 
-    // 排序函式
+    // sorting function
     function sortByRating() {
-      isAscending = !isAscending; // 切換排序方向
+      isAscending = !isAscending; // change the sorting direction
       const sorted = [...reviewsData].sort((a, b) => {
         return isAscending ? a.rating - b.rating : b.rating - a.rating;
       });
       renderReviews(sorted);
 
-      // 更新排序圖示
+      // change the button for sorting
       const sortIcon = document.getElementById('sort-icon');
-      sortIcon.textContent = isAscending ? '↑' : '↓'; // 顯示升冪或降冪箭頭
+      sortIcon.textContent = isAscending ? '↑' : '↓'; // show the ascending and descending
     }
   </script>
 </body>
