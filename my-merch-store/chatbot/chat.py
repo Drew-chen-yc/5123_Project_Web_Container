@@ -3,7 +3,12 @@ import openai
 
 app = Flask(__name__)
 
+#file = open(".\\5123-Project-sk.txt")
+#for line in file.readlines():
 openai.api_key = "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"
+#file.close()
+
+#client = openai.OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
 
 def get_prompt_from_nlp(nlp_text):
