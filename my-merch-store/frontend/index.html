@@ -6,6 +6,38 @@
   <title>Merch Store</title>
   <link rel="stylesheet" type="text/css" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* control iframe look and hide the iframe */
+    #chatbot-frame {
+      display: none;
+      position: fixed;
+      bottom: 70px;
+      right: 20px;
+      width: 400px;
+      height: 600px;
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.15);
+      z-index: 9999;
+    }
+
+    /* chat botton */
+    #chat-toggle-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      border: none;
+      border-radius: 50%;
+      background-color: #0078D4;
+      color: white;
+      font-size: 28px;
+      cursor: pointer;
+      z-index: 10000;
+      box-shadow: 0 0 8px rgba(0,0,0,0.2);
+    }
+  </style>
 
 </head>
 <body>
@@ -25,6 +57,25 @@
     <div id="cart" class="cart-list"></div>
     <p id="total"></p>
   </div>
+
+  <!-- Chatbot iframe（預設隱藏） -->
+  <iframe id="chatbot-frame" src="http://localhost:5002"></iframe>
+
+  <!-- Toggle Chat Button -->
+  <button id="chat-toggle-btn">🤖</button>
+
+  <script>
+    const toggleBtn = document.getElementById("chat-toggle-btn");
+    const chatFrame = document.getElementById("chatbot-frame");
+
+    toggleBtn.addEventListener("click", () => {
+      if (chatFrame.style.display === "none") {
+        chatFrame.style.display = "block";
+      } else {
+        chatFrame.style.display = "none";
+      }
+    });
+  </script>
 
   <script src="script.js"></script>
 </body>
