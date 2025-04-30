@@ -2,48 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <link rel="stylesheet" href="style.css">
   <title>Game Reviews</title>
-  <style>
-    .game-container {
-      border-bottom: 1px solid #ccc;
-      padding: 10px;
-    }
 
-    .game-title {
-      cursor: pointer;
-      font-weight: bold;
-      color: blue;
-    }
-
-    .game-rating {
-      display: inline-block;
-      margin-left: 10px;
-      color: darkorange;
-    }
-
-    .review-box {
-      margin-top: 5px;
-      display: none;
-    }
-
-    .sort-btn {
-      margin-bottom: 20px;
-      padding: 5px 10px;
-      font-size: 16px;
-      cursor: pointer;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 4px;
-    }
-
-    .sort-btn:hover {
-      background-color: #0056b3;
-    }
-  </style>
 </head>
 <body>
-  <h1>Game Reviews</h1>
+  <!-- Top nav bar -->
+  <div class="top-nav">
+    <div class="top-nav-left">
+      <img src="https://i.imgur.com/hMNWQ1u.png" alt="Logo">
+      <h1>Game Reviews</h1>
+    </div>
+    <div class="top-nav-right">
+      <a href="http://localhost:8080/" target="_blank" class="merch-link">🛒</a>
+      <a href="http://localhost:5003/" target="_blank" class="home-link">🏠</a>
+    </div>
+  </div>
+  <br /><br />
   <button class="sort-btn" onclick="sortByRating()">Sort by Rating <span id="sort-icon">↓</span></button>
   <div id="reviews"></div>
 
