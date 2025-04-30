@@ -21,10 +21,9 @@ fetch('http://localhost:5001/items')
 
       // Create and add Add to Cart button
       const btn = document.createElement('button');
-      btn.textContent = 'Add to Cart';
-      btn.onclick = () => updateItemQuantity(item, 1); // Use updateItemQuantity function to handle adding to cart
-      div.appendChild(btn);
-
+      btn.innerHTML = '<i class="fas fa-cart-plus"></i>';  // sets HTML, allowing emojis or even <img>/<svg> icons
+      btn.onclick = () => updateItemQuantity(item, 1);
+div.appendChild(btn);
       // Append the product div to the items container
       itemsDiv.appendChild(div);
     });

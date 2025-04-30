@@ -1,33 +1,48 @@
 /* setting background color and web page margin */
 body {
   font-family: Arial, sans-serif;
-  background-image: url('https://img.freepik.com/free-vector/character-playing-videogame-concept_52683-37588.jpg?t=st=1745620204~exp=1745623804~hmac=835b4ac062cc29f0e165277ff4268305d907fb387c1688d14fd936074f2da8c1&w=826'); /* 這裡填入你的圖片 URL */
-  background-size: cover; /* Make the background image cover the entire background */
-  background-position: center; /* Center the pic */
+  background-image: url('https://i.imgur.com/d7WVi4l.jpeg');
+  background-size: cover;
+  background-position: center;
   margin: 0;
   padding: 0;
   color: #333;
-  height: 100vh; /* Make the page height equal to the viewport height */
+  height: 100vh;
+}
+.content-wrapper {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  padding-top: 20px;
+}
+.logo-banner {
+  width: 100%;
+  text-align: center;       /* centers the image horizontally */
+  margin-top: 20px;
+  margin-bottom: 20px;     /* pull it closer to container if needed */
 }
 
+.logo-banner img {
+  max-width: 400px;
+  height: auto;
+  display: inline-block;
+}
 /* setting container, making content stay in the middle */
 .container {
-  width: 80%;
+  width: 50%;
   margin: 0 auto;
   padding: 20px;
-  background-color: rgba(255, 255, 255, 0.9); /* Make the background slightly transparent so the background image remains visible */
+  background-color: rgba(25, 29, 85, 0.75); /* Make the background slightly transparent so the background image remains visible */
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 12px 3px #1770d6;
   margin-top: 40px;
+  border: 3px solid #1770d6;
 }
 
 /* Setting title */
 h1, h2 {
   text-align: center;
-  color: #444;
+  color: #d732bc;
 }
 
 h2 {
@@ -44,13 +59,15 @@ h2 {
 }
 
 .items-list div {
-  background-color: #cbcbcb;
   padding: 15px;
   margin: 10px;
   border-radius: 8px;
   width: 200px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   text-align: center;
+
+  border: 3px solid #f79d18; 
+  box-shadow: 0 0 12px 3px #f79d18;
 }
 
 .items-list img {
@@ -63,10 +80,11 @@ h2 {
 .items-list p {
   font-size: 1.1em;
   margin: 0;
+  color: white;
 }
 
 button {
-  background-color: #28a745;
+  background-color: #f77a35;
   color: white;
   border: none;
   padding: 10px;
@@ -77,7 +95,7 @@ button {
 }
 
 button:hover {
-  background-color: #218838;
+  background-color: #e53e59;
 }
 
 /* cart list */
@@ -128,7 +146,7 @@ button:hover {
   background-color: #28a745;
   color: white;
   border: none;
-  padding: 5px 10px;
+  padding: 1px;
   cursor: pointer;
   border-radius: 50%;
   font-size: 1.5em;
@@ -136,7 +154,6 @@ button:hover {
   height: 30px;
   display: inline-block;
   text-align: center;
-  margin: 0 10px;
 }
 
 .circle-btn:hover {
@@ -184,3 +201,21 @@ button.empty-cart:hover {
 button.empty-cart:hover {
   background-color: #c82333;
 }  
+.cart-window {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 300px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  padding: 15px;
+  z-index: 999;
+}
+
+.cart-window h2 {
+  margin-top: 0;
+  font-size: 1.2em;
+  text-align: center;
+  color: #444;
+}
