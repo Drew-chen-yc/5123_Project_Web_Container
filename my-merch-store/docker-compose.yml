@@ -33,3 +33,10 @@ services:
       - "8080:80"
     depends_on:
       - mockdata
+
+  review:
+    build: ./review
+    ports:
+      - "5003:80"
+    depends_on:
+      - mockdata  
