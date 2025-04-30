@@ -29,7 +29,7 @@ div.appendChild(btn);
     });
   });
 
-// 更新商品數量：+1 或 -1
+// renew num of items：+1 or -1
 function updateItemQuantity(item, change) {
   fetch('http://localhost:5000/cart/update', {
     method: 'POST',
@@ -38,7 +38,7 @@ function updateItemQuantity(item, change) {
   }).then(() => showCart());
 }
 
-// 顯示購物車
+// showing cart
 function showCart() {
   fetch('http://localhost:5000/cart')
     .then(response => response.json())
@@ -106,3 +106,32 @@ function showCart() {
 
 // Initial load of the cart
 showCart();
+
+// Chatbot notice (only display once)
+window.addEventListener("load", () => {
+  if (!noticeDisplayed) {
+    const notice = document.createElement("div");
+    notice.textContent = "🤖 This is a chatbot. Click the button in the bottom-right corner to start chatting!";
+    notice.style.position = "fixed";
+    notice.style.bottom = "100px";
+    notice.style.right = "20px";
+    notice.style.backgroundColor = "#0078D4";
+    notice.style.color = "white";
+    notice.style.padding = "12px 16px";
+    notice.style.borderRadius = "10px";
+    notice.style.boxShadow = "0 2px 10px rgba(0,0,0,0.2)";
+    notice.style.zIndex = 10001;
+    notice.style.transition = "opacity 1s ease";
+    document.body.appendChild(notice);
+
+    setTimeout(() => {
+      notice.style.opacity = "0";
+      setTimeout(() => {
+        notice.remove();
+      }, 1000);
+    }, 5000);
+
+    // Set the flag to true so notice won't display again
+    noticeDisplayed = true;
+  }
+});
