@@ -31,19 +31,33 @@ Develop the necessary content and improve the user experience.
 
 ## Project Structure
 5123_Project/
+
 ├── backend(mockdata)/
+
 │   └── app.py
+
 │   └── dockerfile
+
 ├── frontend/
+
 │   └── index.html
+
 │   └── dockerfile
+
 ├── review/
+
 │   └── reviews.py
+
 │   └── dockerfile
+
 ├── chatbot/
+
 │   └── chat.py
+
 │   └── dockerfile
+
 ├── docker-compose.yml
+
 └── README.md
 
 ## VS code environment:
