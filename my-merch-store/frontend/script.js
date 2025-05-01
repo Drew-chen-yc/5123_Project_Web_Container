@@ -1,4 +1,5 @@
 let items = []; // Track all items and their in-cart state
+let noticeDisplayed = false
 
 function showSpinner() {
   const spinner = document.getElementById('spinner');
@@ -43,59 +44,83 @@ function closePopup() {
 
 
 // display the products
-fetch('http://localhost:5001/items')
-  .then(response => response.json())
-  .then(data => {
-    const itemsDiv = document.getElementById('items');
-    itemsDiv.innerHTML = ''; // Clear previous contents
-    items = data.map(item => {
-      item.inCart = 0; // Initialize cart quantity
-      const div = document.createElement('div');
-      div.className = 'product-item';
+function displayItems() {
+  fetch('http://localhost:5001/items')
+    .then(response => response.json())
+    .then(data => {
+      const itemsDiv = document.getElementById('items');
+      itemsDiv.innerHTML = ''; // Clear previous contents
+      items = data.map(item => {
+        item.inCart = 0; // Initialize cart quantity
+        const div = document.createElement('div');
+        div.className = 'product-item';
 
-      // Create and add the product image
-      const img = document.createElement('img');
-      img.src = "http://localhost:5001/static/images/" + item.picture;  // Use the image URL from the response
-      img.alt = item.name;
-      img.className = 'product-image';
-      div.appendChild(img);
+        // Create a wrapper for the image and overlay
+        const imageWrapper = document.createElement('div');
+        imageWrapper.className = 'image-wrapper';
 
-      // Create and add product name and price
-      const p = document.createElement('p');
-      p.textContent = `${item.name} - $${item.price}`;
-      div.appendChild(p);
+        // Create and add the product image
+        const img = document.createElement('img');
+        img.src = "http://localhost:5001/static/images/" + item.picture;  // Use the image URL from the response
+        img.alt = item.name;
+        img.className = 'product-image';
+        imageWrapper.appendChild(img);
 
-      const qty = document.createElement('p');
-      qty.textContent = `Available: ${item.quantity}`;
-      div.appendChild(qty);
+        // If sold out, add overlay
+        if (item.quantity === 0) {
+          const overlay = document.createElement('div');
+          overlay.className = 'sold-out-overlay';
+          overlay.textContent = 'Sold Out';
+          imageWrapper.appendChild(overlay);
+        }
 
-      // Create and add Add to Cart button
-      const btn = document.createElement('button');
-      btn.innerHTML = '<i class="fas fa-cart-plus"></i>';  // sets HTML, allowing emojis or even <img>/<svg> icons
-      btn.onclick = () => {
+        div.appendChild(imageWrapper);
+
+        // Create and add product name and price
+        const p = document.createElement('p');
+        p.textContent = `${item.name} - $${item.price}`;
+        div.appendChild(p);
+
+        const qty = document.createElement('p');
+        qty.textContent = `Available: ${item.quantity}`;
+        div.appendChild(qty);
+
+        // Create and add Add to Cart button
+        const btn = document.createElement('button');
+        btn.innerHTML = '<i class="fas fa-cart-plus"></i>';  // sets HTML, allowing emojis or even <img>/<svg> icons
+        btn.onclick = () => {
           updateItemQuantity(item, 1);
-      };
-      div.appendChild(btn);
-      // Append the product div to the items container
-      itemsDiv.appendChild(div);
+        };
+        // Disable the button if the item is out of stock
+        if (item.quantity === 0) {
+          btn.disabled = true;
+          btn.style.backgroundColor = '#ccc';  // optional: grey out
+          btn.style.cursor = 'not-allowed';
+          btn.title = 'Out of stock';  // optional: tooltip
+        }
+        div.appendChild(btn);
+        // Append the product div to the items container
+        itemsDiv.appendChild(div);
 
-      return item
+        return item
+      });
     });
-  });
+};
 
-// renew num of items：+1 or -1
 function updateItemQuantity(item, change) {
   const newQuantity = item.inCart + change;
 
-  if (newQuantity < 0) return;
+  if (newQuantity < 0) return; // Prevent going below 0
   if (newQuantity > item.quantity) {
     showPopup(`Only ${item.quantity} in stock`);
-    return;
+    return; // Prevent going above available stock
   }
 
+  // Update inCart quantity
   item.inCart = newQuantity;
 
-  fetch('http://localhost:5000/cart/update', {
+  // Send updated data to the backend
+  fetch('http://localhost:5001/cart/update', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name: item.name, price: item.price, change })
@@ -104,7 +129,7 @@ function updateItemQuantity(item, change) {
 
 // showing cart
 function showCart() {
-  fetch('http://localhost:5000/cart')
+  fetch('http://localhost:5001/cart')
     .then(response => response.json())
     .then(cart => {
       const cartDiv = document.getElementById('cart');
@@ -112,7 +137,11 @@ function showCart() {
 
       let total = 0;
 
-      cart.forEach(item => {
+      cart.forEach(cartItem => {
+        // Match cart item to full item data
+        const item = items.find(i => i.name === cartItem.name);
+        if (!item) return; // Skip if not found
+
         const itemDiv = document.createElement('div');
         itemDiv.className = 'cart-item';
 
@@ -122,10 +151,9 @@ function showCart() {
         // Create and add the minus button (decrease quantity)
         const minusBtn = document.createElement('button');
         minusBtn.className = 'circle-btn';
+        minusBtn.id = `minus-btn-${item.id}`;  // Unique ID for easy reference
         minusBtn.textContent = '-';
-        minusBtn.onclick = () => {
-            updateItemQuantity(item, -1);
-        };
+        minusBtn.onclick = () => updateItemQuantity(item, -1);
 
         // Quantity display
         const qtyDisplay = document.createElement('span');
@@ -135,10 +163,16 @@ function showCart() {
         // Create and add the plus button (increase quantity)
         const plusBtn = document.createElement('button');
         plusBtn.className = 'circle-btn';
+        plusBtn.id = `plus-btn-${item.id}`;  // Unique ID for easy reference
         plusBtn.textContent = '+';
-        plusBtn.onclick = () => {
-            updateItemQuantity(item, 1);
-        };
+
+        // Disable plus button if item.inCart >= item.quantity
+        if (item.inCart >= item.quantity) {
+          plusBtn.disabled = true;
+          plusBtn.classList.add('disabled-btn');
+        } else {
+          plusBtn.onclick = () => updateItemQuantity(item, 1);
+        }
 
         // Append all the elements to the cart item div
         itemDiv.appendChild(namePrice);
@@ -164,7 +198,7 @@ function showCart() {
       clearBtn.textContent = 'Empty Cart';
       clearBtn.style.marginTop = '10px';
       clearBtn.onclick = () => {
-        fetch('http://localhost:5000/cart/clear', {
+        fetch('http://localhost:5001/cart/clear', {
           method: 'POST'
         }).then(() => {
           items.forEach(item => item.inCart = 0);
@@ -188,7 +222,7 @@ function showCart() {
 
         showSpinner();
 
-        fetch('http://localhost:5000/purchase', {
+        fetch('http://localhost:5001/cart/buy', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ cart: cartItems })
@@ -198,6 +232,7 @@ function showCart() {
           items.forEach(item => item.inCart = 0);
           showCart();
           showPopup(data.message || 'Purchase complete!');
+          displayItems();
         })
         .catch(err => {
           console.error('Purchase error:', err);
@@ -209,7 +244,8 @@ function showCart() {
     });
 }
 
-// Initial load of the cart
+// Initial load of the page
+displayItems();
 showCart();
 
 // Chatbot notice (only display once)
