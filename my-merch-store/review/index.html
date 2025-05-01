@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <link rel="stylesheet" href="style.css">
   <title>Game Reviews</title>
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
   <!-- Top nav bar -->
@@ -14,71 +14,21 @@
       <h1>Game Reviews</h1>
     </div>
     <div class="top-nav-right">
-      <a href="http://localhost:8080/" target="_blank" class="merch-link">🛒</a>
-      <a href="http://localhost:5003/" target="_blank" class="home-link">🏠</a>
+	<a href="http://localhost:8080/" target="_blank" class="merch-link">
+	  <i class="fas fa-shopping-cart"></i></a>
+	<a href="http://localhost:5003/" target="_blank" class="home-link">
+	  <i class="fas fa-home"></i></a>
     </div>
   </div>
   <br /><br />
+  <div class="sort-controls">
   <button class="sort-btn" onclick="sortByRating()">Sort by Rating <span id="sort-icon">↓</span></button>
+  <button class="sort-btn" onclick="sortByAlphabetical()">Sort A–Z <span id="alpha-sort-icon">↓</span></button>
+</div>
   <div id="reviews"></div>
 
-  <script>
-    let reviewsData = []; // stored original data
-    let isAscending = false; // default for ascending
+  <script src="reviews.js">
 
-    // fetch data
-    fetch('http://localhost:5001/reviews')
-      .then(response => response.json())
-      .then(data => {
-        reviewsData = data;
-        renderReviews(reviewsData); // first render
-      });
-
-    // render view
-    function renderReviews(data) {
-      const reviewsDiv = document.getElementById('reviews');
-      reviewsDiv.innerHTML = ''; // clean content
-
-      data.forEach(item => {
-        const container = document.createElement('div');
-        container.className = 'game-container';
-
-        const title = document.createElement('div');
-        title.textContent = item.title;
-        title.className = 'game-title';
-
-        const rating = document.createElement('span');
-        rating.textContent = `(Rating: ${item.rating})`;
-        rating.className = 'game-rating';
-
-        const review = document.createElement('div');
-        review.textContent = item.review;
-        review.className = 'review-box';
-
-        // click hte title and change review display
-        title.addEventListener('click', () => {
-          review.style.display = (review.style.display === 'block') ? 'none' : 'block';
-        });
-
-        container.appendChild(title);
-        container.appendChild(rating);
-        container.appendChild(review);
-        reviewsDiv.appendChild(container);
-      });
-    }
-
-    // sorting function
-    function sortByRating() {
-      isAscending = !isAscending; // change the sorting direction
-      const sorted = [...reviewsData].sort((a, b) => {
-        return isAscending ? a.rating - b.rating : b.rating - a.rating;
-      });
-      renderReviews(sorted);
-
-      // change the button for sorting
-      const sortIcon = document.getElementById('sort-icon');
-      sortIcon.textContent = isAscending ? '↑' : '↓'; // show the ascending and descending
-    }
-  </script>
+</script>
 </body>
 </html>

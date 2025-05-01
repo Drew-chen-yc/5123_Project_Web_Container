@@ -42,6 +42,7 @@ body, html {
 .userText span {
     padding: 10px;
     border-radius: 2px;
+    background-color: #4169e1;
 }
 
 .botText {
@@ -53,7 +54,7 @@ body, html {
 }
 
 .botText span {
-    background-color: #4169e1;
+    background-color: grey;
     padding: 10px;
     border-radius: 12px;       /* This gives it a nice rounded look */
     display: inline-block;     /* Optional: better for chat bubbles */

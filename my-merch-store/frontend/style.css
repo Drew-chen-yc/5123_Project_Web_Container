@@ -1,11 +1,69 @@
 /* setting background color and web page margin */
+/* Top navigation bar */
+.top-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #333;
+  padding: 10px 24px 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 999;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+}
+.top-nav-left {
+  display: flex;
+  align-items: center;
+}
+
+.top-nav-right {
+  display: flex;
+  align-items: center;
+}
+
+.top-nav-left img {
+  height: 40px;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
+.top-nav-left h1 {
+  color: white;
+  font-size: 24px;
+  margin: 0;
+}
+
+.top-nav a {
+  color: white;
+  font-size: 20px;
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+  margin-left: 10px;
+}
+
+.top-nav .merch-link {
+  background-color: orange;
+}
+
+.top-nav .home-link {
+  background-color: #4CAF50;
+}
+
+.top-nav a:hover {
+  background-color: #555;
+}
 body {
   font-family: Arial, sans-serif;
   background-image: url('https://i.imgur.com/d7WVi4l.jpeg');
   background-size: cover;
   background-position: center;
   margin: 0;
-  padding: 0;
+  padding: 80px;
   color: #333;
   height: 100vh;
 }
@@ -63,9 +121,7 @@ h2 {
   margin: 10px;
   border-radius: 8px;
   width: 200px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   text-align: center;
-
   border: 3px solid #f79d18; 
   box-shadow: 0 0 12px 3px #f79d18;
 }
@@ -273,7 +329,7 @@ button.empty-cart:hover {
 }  
 .cart-window {
   position: fixed;
-  top: 20px;
+  top: 80px;
   right: 20px;
   width: 300px;
   background-color: white;
