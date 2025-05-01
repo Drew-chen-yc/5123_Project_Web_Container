@@ -198,3 +198,9 @@ body {
   margin-left: 10px;
   border-radius: 4px;
 }
+.review-item {
+  cursor: pointer;
+}
+.game-container {
+  cursor: pointer;
+}
