@@ -22,20 +22,37 @@
   </div>
   <br /><br />
   <div class="sort-controls">
-  <div class="sort-controls">
-  <label for="sort-select"><strong>Sort by:</strong></label>
-  <select id="sort-select" class="sort-dropdown" onchange="handleSortChange()">
-    <option value="alphabetical">A–Z</option>
-    <option value="rating">Rating</option>
-    <option value="review_date">Review Date</option>
-    <option value="release_date">Release Date</option>
-  </select>
-</div>
-</div>
+    <div class="sort-controls">
+      <label for="sort-select"><strong>Sort by:</strong></label>
+      <select id="sort-select" class="sort-dropdown" onchange="handleSortChange()">
+        <option value="alphabetical">A–Z</option>
+        <option value="rating">Rating</option>
+        <option value="review_date">Review Date</option>
+        <option value="release_date">Release Date</option>
+      </select>
+    </div>
+  </div>
   <div id="reviews"></div>
 
-  <script src="reviews.js">
+  <!-- Chatbot iframe（default hide） -->
+  <iframe id="chatbot-frame" src="http://localhost:5002"></iframe>
 
-</script>
+  <!-- Toggle Chat Button -->
+  <button id="chat-toggle-btn">🤖</button>
+
+  <script>
+    const toggleBtn = document.getElementById("chat-toggle-btn");
+    const chatFrame = document.getElementById("chatbot-frame");
+
+    toggleBtn.addEventListener("click", () => {
+      if (chatFrame.style.display === "block") {
+        chatFrame.style.display = "none";
+      } else {
+        chatFrame.style.display = "block";
+      }
+    });
+  </script>
+
+  <script src="reviews.js"></script>
 </body>
 </html>

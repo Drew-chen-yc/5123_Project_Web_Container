@@ -1,5 +1,9 @@
 let items = []; // Track all items and their in-cart state
 let noticeDisplayed = false
+let notice = null; // Global reference
+
+const toggleBtn = document.getElementById("chat-toggle-btn");
+const chatFrame = document.getElementById("chatbot-frame");
 
 function showSpinner() {
   const spinner = document.getElementById('spinner');
@@ -248,10 +252,33 @@ function showCart() {
 displayItems();
 showCart();
 
+// Function to remove notice
+function dismissNotice() {
+  if (notice) {
+    notice.style.opacity = "0";
+    setTimeout(() => {
+      if (notice) notice.remove();
+      notice = null;
+    }, 1000);
+  }
+}
+
+toggleBtn.addEventListener("click", () => {
+  // Hide or show the chatbot frame
+  if (chatFrame.style.display === "block") {
+    chatFrame.style.display = "none";
+  } else {
+    chatFrame.style.display = "block";
+  }
+
+  // Dismiss the notice when chat button is clicked
+  dismissNotice();
+});
+
 // Chatbot notice (only display once)
 window.addEventListener("load", () => {
   if (!noticeDisplayed) {
-    const notice = document.createElement("div");
+    notice = document.createElement("div");
     notice.textContent = "🤖 This is a chatbot. Click the button in the bottom-right corner to start chatting!";
     notice.style.position = "fixed";
     notice.style.bottom = "100px";
@@ -266,13 +293,9 @@ window.addEventListener("load", () => {
     document.body.appendChild(notice);
 
     setTimeout(() => {
-      notice.style.opacity = "0";
-      setTimeout(() => {
-        notice.remove();
-      }, 1000);
+      dismissNotice();
     }, 5000);
 
-    // Set the flag to true so notice won't display again
     noticeDisplayed = true;
   }
 });

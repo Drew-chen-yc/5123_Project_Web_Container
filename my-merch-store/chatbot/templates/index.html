@@ -57,17 +57,58 @@
     </div>
 
     <script>
+        let messages = [];
+        const storedMessages = localStorage.getItem("chat_messages");
+        if (storedMessages) {
+          messages = JSON.parse(storedMessages);
+          loadChatUIFromMessages()
+        }
+
+        function loadChatUIFromMessages() {
+          $("#chatbox").html(""); // clear
+          messages.forEach(msg => {
+            if (msg.role === "user") {
+              $("#chatbox").append(`<p class="userText"><span>${msg.content}</span></p>`);
+            } else if (msg.role === "assistant") {
+              $("#chatbox").append(`<p class="botText"><span>${msg.content}</span></p>`);
+            }
+          });
+        }
+
+        function saveChatHistory() {
+          const chatHtml = $("#chatbox").html();
+          localStorage.setItem("chat_history", chatHtml);
+          localStorage.setItem("chat_context", JSON.stringify(messages));
+        }
+        $(document).ready(function () {
+          const saved = localStorage.getItem("chat_history");
+          if (saved) {
+            $("#chatbox").html(saved);
+          }
+          const stored = localStorage.getItem("chat_context");
+          if (stored) messages = JSON.parse(stored);
+        });
+
         function getBotResponse() {
             var rawText = $("#textInput").val();
             var userHtml = '<p class="userText"><span>' + rawText + "</span></p>";
             $("#textInput").val("");
             $("#chatbox").append(userHtml);
-            document.getElementById("userInput").scrollIntoView({ block: "start", behavior: "smooth" });
 
+            // Add typing indicator
+            var typingHtml = '<p class="botText" id="typing"><span>...</span></p>';
+            $("#chatbox").append(typingHtml);
+
+            $("#chatbox").scrollTop($("#chatbox")[0].scrollHeight);
+
+            // Get response from backend
             $.get("/get", { msg: rawText }).done(function (data) {
+                // Remove typing indicator
+                $("#typing").remove();
                 var botHtml = '<p class="botText"><span>' + data + "</span></p>";
                 $("#chatbox").append(botHtml);
-                document.getElementById("userInput").scrollIntoView({ block: "start", behavior: "smooth" });
+                saveChatHistory();
+                $("#chatbox").scrollTop($("#chatbox")[0].scrollHeight);
             });
         }
 

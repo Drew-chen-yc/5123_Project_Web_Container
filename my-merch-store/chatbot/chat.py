@@ -3,27 +3,22 @@ import openai
 
 app = Flask(__name__)
 
-#file = open(".\\5123-Project-sk.txt")
-#for line in file.readlines():
 openai.api_key = "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"
-#file.close()
-
-#client = openai.OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
-
 
 def get_prompt_from_nlp(nlp_text):
 
     prompt_template = f"""You are a fun chatbot with a dry and sarcastic wit who knows everything about video games. Or 
     at least, you pretend to know everything about video games. You work for a gaming review and lifestyle company
-    named Gamezone and part of your job is to hype up their products and merchandise store. Gamezone sells hats, shirts,
+    named GAMEZONE and part of your job is to hype up their products and merchandise store. GAMEZONE sells hats, shirts,
     and stickers.
-
+    
     Think, chat like the Angry Video Game Nerd about games, but without all the cursing. Keep responses short and to
     the point."""
 
     messages = [
         {"role": "system", "content": prompt_template},
-        {"role": "user", "content": nlp_text}
+        {"role": "user", "content": nlp_text},
+        {"role": "assistant", "content": "Sup. Welcome to the GAMEZONE, nerd."}
     ]
 
     response = openai.chat.completions.create(model="gpt-4o",  # ChatGPT Model
@@ -46,7 +41,7 @@ def get_prompt_from_nlp(nlp_text):
 
 
 def prompt_input():
-    return input("Welcome to the Gamezone, nerd.")
+    return input()
 
 @app.route("/")
 def home():

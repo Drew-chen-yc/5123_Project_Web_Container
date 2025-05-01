@@ -1,3 +1,41 @@
+/* control iframe look and hide the iframe */
+#chatbot-frame {
+  display: none;
+  position: fixed;
+  bottom: 70px;
+  right: 20px;
+  width: 400px;
+  height: 600px;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.15);
+  z-index: 9999;
+}
+
+/* chat button */
+#chat-toggle-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  border: none;
+  border-radius: 50%;
+  background-color: #0078D4;
+  color: white;
+  font-size: 28px;
+  cursor: pointer;
+  z-index: 10000;
+  box-shadow: 0 0 8px rgba(0,0,0,0.2);
+}
+
+@font-face {
+  font-family: 'HeadingNow';
+  src: url('http://localhost:5001/static/fonts/HeadingNowTrial-66Bold.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 /* Top navigation bar */
 .top-nav {
   position: fixed;
@@ -13,6 +51,7 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   box-sizing: border-box;
 }
+
 body {
   font-family: Arial, sans-serif;
   background-image: url('https://i.imgur.com/d7WVi4l.jpeg');
