@@ -1,11 +1,11 @@
 --
--- PostgreSQL database dump
+-- storefrontQL database dump
 --
 
 -- Dumped from database version 17.4
 -- Dumped by pg_dump version 17.4
 
--- Started on 2025-04-30 13:20:43
+-- Started on 2025-04-30 19:09:15
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -29,7 +29,7 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.inventory (
-    merch_id integer,
+    merch_id integer NOT NULL,
     quantity integer
 );
 
@@ -68,7 +68,7 @@ CREATE SEQUENCE public.merch_id_seq
 ALTER SEQUENCE public.merch_id_seq OWNER TO storefront;
 
 --
--- TOC entry 4914 (class 0 OID 0)
+-- TOC entry 4916 (class 0 OID 0)
 -- Dependencies: 219
 -- Name: merch_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: storefront
 --
@@ -85,7 +85,9 @@ CREATE TABLE public.reviews (
     id integer NOT NULL,
     title character varying,
     rating smallint,
-    review character varying
+    review character varying,
+    release_date date,
+    review_date date
 );
 
 
@@ -108,7 +110,7 @@ CREATE SEQUENCE public.reviews_id_seq
 ALTER SEQUENCE public.reviews_id_seq OWNER TO storefront;
 
 --
--- TOC entry 4915 (class 0 OID 0)
+-- TOC entry 4917 (class 0 OID 0)
 -- Dependencies: 220
 -- Name: reviews_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: storefront
 --
@@ -133,7 +135,7 @@ ALTER TABLE ONLY public.reviews ALTER COLUMN id SET DEFAULT nextval('public.revi
 
 
 --
--- TOC entry 4904 (class 0 OID 16415)
+-- TOC entry 4906 (class 0 OID 16415)
 -- Dependencies: 217
 -- Data for Name: inventory; Type: TABLE DATA; Schema: public; Owner: storefront
 --
@@ -146,7 +148,7 @@ COPY public.inventory (merch_id, quantity) FROM stdin;
 
 
 --
--- TOC entry 4905 (class 0 OID 16418)
+-- TOC entry 4907 (class 0 OID 16418)
 -- Dependencies: 218
 -- Data for Name: merch; Type: TABLE DATA; Schema: public; Owner: storefront
 --
@@ -159,27 +161,27 @@ COPY public.merch (id, name, price, picture) FROM stdin;
 
 
 --
--- TOC entry 4908 (class 0 OID 16434)
+-- TOC entry 4910 (class 0 OID 16434)
 -- Dependencies: 221
 -- Data for Name: reviews; Type: TABLE DATA; Schema: public; Owner: storefront
 --
 
-COPY public.reviews (id, title, rating, review) FROM stdin;
-1	Clair Obscur: Expedition 33	5	This game is like if a French art museum exploded into an RPG. The combat is turn-based but throws in real-time dodging and parrying, keeping you on your toes. The story? A cursed countdown where people vanish annually—talk about pressure! It's emotionally gripping, visually stunning, and the voice acting is top-notch. Despite minor quirks, it's a masterpiece.
-2	Atomfall	3	Set in a post-apocalyptic Lake District, this game nails atmosphere. But the lack of fast travel turns it into a walking simulator nightmare. You'll traverse the same areas repeatedly, facing tough enemies that ruin the pacing. It's like being stuck in a scenic loop of frustration.
-3	Avowed	4	Obsidian delivers a rich world with engaging lore. The 'Dawntreader' quest is a standout, making the world feel alive. It's a refreshing change from games that dump lore through endless text. A solid RPG that respects your time and curiosity.
-4	Promise Mascot Agency	4	Managing a mascot agency in a world inspired by Japanese folklore? It's as bizarre as it sounds, but it works. A blend of sim and visual novel that’s quirky, heartfelt, and surprisingly engaging.
-5	Lost Records: Bloom and Rage	4	A narrative adventure that dives deep into nostalgia and memory. Set in 1990s Michigan, it explores inconsistencies of memory and unresolved trauma. A thoughtful journey that resonates.
-6	Oblivion Remastered	3	Revisiting this classic feels like opening a time capsule. Great mechanics and early celebrity voice acting shine, but technical issues and those creepy NPC faces hold it back. Nostalgia trip with bumps.
-7	Doom: The Dark Ages	4	Doom goes medieval and it’s a blast. Slayer trades guns for swords, battling demons in a brutal dark fantasy. Fast, intense, and fresh while retaining classic Doom feel.
-8	Monster Hunter Wilds	4	Capcom delivers another epic. Gorgeous environments and new mechanics deepen the hunts. Challenging and rewarding, it’s a must-play—just kiss your free time goodbye.
-9	Split Fiction	4	A co-op platformer with tight gameplay and an engaging narrative. A stellar example of fun and depth combined. Grab a friend and go!
-10	Borderlands 4	3	More guns, humor, and chaos. Doesn’t reinvent anything but keeps the formula fun. Jokes may be stale, but gameplay is rock solid. A fun ride, not a game-changer.
+COPY public.reviews (id, title, rating, review, release_date, review_date) FROM stdin;
+1	Clair Obscur: Expedition 33	5	This game is like if a French art museum exploded into an RPG. The combat is turn-based but throws in real-time dodging and parrying, keeping you on your toes. The story? A cursed countdown where people vanish annually—talk about pressure! It's emotionally gripping, visually stunning, and the voice acting is top-notch. Despite minor quirks, it's a masterpiece.	2025-04-24	2025-04-20
+2	Atomfall	3	Set in a post-apocalyptic Lake District, this game nails atmosphere. But the lack of fast travel turns it into a walking simulator nightmare. You'll traverse the same areas repeatedly, facing tough enemies that ruin the pacing. It's like being stuck in a scenic loop of frustration.	2025-03-27	2025-03-26
+3	Avowed	4	Obsidian delivers a rich world with engaging lore. The 'Dawntreader' quest is a standout, making the world feel alive. It's a refreshing change from games that dump lore through endless text. A solid RPG that respects your time and curiosity.	2025-02-18	2025-02-20
+4	Promise Mascot Agency	4	Managing a mascot agency in a world inspired by Japanese folklore? It's as bizarre as it sounds, but it works. A blend of sim and visual novel that's quirky, heartfelt, and surprisingly engaging.	2025-04-10	2025-04-15
+5	Lost Records: Bloom and Rage	4	A narrative adventure that dives deep into nostalgia and memory. Set in 1990s Michigan, it explores inconsistencies of memory and unresolved trauma. A thoughtful journey that resonates.	2025-02-18	2025-02-21
+6	Oblivion Remastered	3	Revisiting this classic feels like opening a time capsule. Great mechanics and early celebrity voice acting shine, but technical issues and those creepy NPC faces hold it back. Nostalgia trip with bumps.	2025-04-22	2025-04-24
+7	Doom: The Dark Ages	4	Doom goes medieval and it's a blast. Slayer trades guns for swords, battling demons in a brutal dark fantasy. Fast, intense, and fresh while retaining classic Doom feel.	2025-05-14	2025-05-12
+8	Monster Hunter Wilds	4	Capcom delivers another epic. Gorgeous environments and new mechanics deepen the hunts. Challenging and rewarding, it's a must-play—just kiss your free time goodbye.	2025-02-27	2025-02-25
+9	Split Fiction	4	A co-op platformer with tight gameplay and an engaging narrative. A stellar example of fun and depth combined. Grab a friend and go!	2025-03-06	2025-03-04
+10	Borderlands 4	3	More guns, humor, and chaos. Doesn't reinvent anything but keeps the formula fun. Jokes may be stale, but gameplay is rock solid. A fun ride, not a game-changer.	2025-09-12	2025-09-12
 \.
 
 
 --
--- TOC entry 4916 (class 0 OID 0)
+-- TOC entry 4918 (class 0 OID 0)
 -- Dependencies: 219
 -- Name: merch_id_seq; Type: SEQUENCE SET; Schema: public; Owner: storefront
 --
@@ -188,7 +190,7 @@ SELECT pg_catalog.setval('public.merch_id_seq', 3, true);
 
 
 --
--- TOC entry 4917 (class 0 OID 0)
+-- TOC entry 4919 (class 0 OID 0)
 -- Dependencies: 220
 -- Name: reviews_id_seq; Type: SEQUENCE SET; Schema: public; Owner: storefront
 --
@@ -197,7 +199,16 @@ SELECT pg_catalog.setval('public.reviews_id_seq', 1, false);
 
 
 --
--- TOC entry 4755 (class 2606 OID 16426)
+-- TOC entry 4755 (class 2606 OID 16443)
+-- Name: inventory inventory_merch_id_primarykey; Type: CONSTRAINT; Schema: public; Owner: storefront
+--
+
+ALTER TABLE ONLY public.inventory
+    ADD CONSTRAINT inventory_merch_id_primarykey PRIMARY KEY (merch_id);
+
+
+--
+-- TOC entry 4757 (class 2606 OID 16426)
 -- Name: merch merchid_primarykey; Type: CONSTRAINT; Schema: public; Owner: storefront
 --
 
@@ -206,7 +217,7 @@ ALTER TABLE ONLY public.merch
 
 
 --
--- TOC entry 4757 (class 2606 OID 16441)
+-- TOC entry 4759 (class 2606 OID 16441)
 -- Name: reviews reviewid_primarykey; Type: CONSTRAINT; Schema: public; Owner: storefront
 --
 
@@ -223,7 +234,7 @@ CREATE INDEX fki_merch_id_foreign_key ON public.inventory USING btree (merch_id)
 
 
 --
--- TOC entry 4758 (class 2606 OID 16428)
+-- TOC entry 4760 (class 2606 OID 16428)
 -- Name: inventory merchid_inventory_foreign_key; Type: FK CONSTRAINT; Schema: public; Owner: storefront
 --
 
@@ -231,9 +242,9 @@ ALTER TABLE ONLY public.inventory
     ADD CONSTRAINT merchid_inventory_foreign_key FOREIGN KEY (merch_id) REFERENCES public.merch(id) NOT VALID;
 
 
--- Completed on 2025-04-30 13:20:44
+-- Completed on 2025-04-30 19:09:16
 
 --
--- PostgreSQL database dump complete
+-- storefrontQL database dump complete
 --
 

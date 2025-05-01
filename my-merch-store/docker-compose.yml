@@ -12,11 +12,6 @@ services:
     volumes:
       - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
 
-  backend:
-    build: ./backend
-    ports:
-      - "5000:5000"
-
   chatbot:
     build: ./chatbot
     ports:
@@ -26,6 +21,13 @@ services:
     build: ./mockdata
     ports:
       - "5001:5001"
+
+  backend:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mockdata
 
   frontend:
     build: ./frontend

@@ -1,9 +1,55 @@
+let items = []; // Track all items and their in-cart state
+
+function showSpinner() {
+  const spinner = document.getElementById('spinner');
+  spinner.classList.remove('fade-out');
+  spinner.style.display = 'flex';
+}
+
+function hideSpinner() {
+  const spinner = document.getElementById('spinner');
+  spinner.classList.add('fade-out');
+
+  setTimeout(() => {
+    spinner.style.display = 'none';
+  }, 300); // Match CSS transition time
+}
+
+function showPopup(message, duration = 3000) {
+  const popup = document.getElementById('confirmation-popup');
+  document.getElementById('popup-message').textContent = message;
+
+  popup.classList.remove('fade-out');
+  popup.style.display = 'flex';
+
+  setTimeout(() => {
+    popup.classList.add('fade-out');
+
+    // Fully hide after fade-out completes
+    setTimeout(() => {
+      popup.style.display = 'none';
+    }, 400); // Match CSS transition time
+  }, duration);
+}
+
+function closePopup() {
+  const popup = document.getElementById('confirmation-popup');
+  popup.classList.add('fade-out');
+
+  setTimeout(() => {
+    popup.style.display = 'none';
+  }, 400); // Match CSS transition time
+}
+
+
 // display the products
 fetch('http://localhost:5001/items')
   .then(response => response.json())
   .then(data => {
     const itemsDiv = document.getElementById('items');
-    data.forEach(item => {
+    itemsDiv.innerHTML = ''; // Clear previous contents
+    items = data.map(item => {
+      item.inCart = 0; // Initialize cart quantity
       const div = document.createElement('div');
       div.className = 'product-item';
 
@@ -19,18 +65,36 @@ fetch('http://localhost:5001/items')
       p.textContent = `${item.name} - $${item.price}`;
       div.appendChild(p);
 
+      const qty = document.createElement('p');
+      qty.textContent = `Available: ${item.quantity}`;
+      div.appendChild(qty);
+
       // Create and add Add to Cart button
       const btn = document.createElement('button');
       btn.innerHTML = '<i class="fas fa-cart-plus"></i>';  // sets HTML, allowing emojis or even <img>/<svg> icons
-      btn.onclick = () => updateItemQuantity(item, 1);
-div.appendChild(btn);
+      btn.onclick = () => {
+          updateItemQuantity(item, 1);
+      };
+      div.appendChild(btn);
       // Append the product div to the items container
       itemsDiv.appendChild(div);
+
+      return item
     });
   });
 
 // renew num of items：+1 or -1
 function updateItemQuantity(item, change) {
+  const newQuantity = item.inCart + change;
+
+  if (newQuantity < 0) return;
+  if (newQuantity > item.quantity) {
+    showPopup(`Only ${item.quantity} in stock`);
+    return;
+  }
+
+  item.inCart = newQuantity;
+
   fetch('http://localhost:5000/cart/update', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -59,18 +123,22 @@ function showCart() {
         const minusBtn = document.createElement('button');
         minusBtn.className = 'circle-btn';
         minusBtn.textContent = '-';
-        minusBtn.onclick = () => updateItemQuantity(item, -1);
+        minusBtn.onclick = () => {
+            updateItemQuantity(item, -1);
+        };
 
         // Quantity display
         const qtyDisplay = document.createElement('span');
         qtyDisplay.className = 'qty-display';
-        qtyDisplay.textContent = item.quantity;
+        qtyDisplay.textContent = item.inCart;
 
         // Create and add the plus button (increase quantity)
         const plusBtn = document.createElement('button');
         plusBtn.className = 'circle-btn';
         plusBtn.textContent = '+';
-        plusBtn.onclick = () => updateItemQuantity(item, 1);
+        plusBtn.onclick = () => {
+            updateItemQuantity(item, 1);
+        };
 
         // Append all the elements to the cart item div
         itemDiv.appendChild(namePrice);
@@ -80,7 +148,7 @@ function showCart() {
 
         cartDiv.appendChild(itemDiv);
 
-        total += item.price * item.quantity;
+        total += item.price * item.inCart;
       });
 
       // Display the total price
@@ -98,9 +166,46 @@ function showCart() {
       clearBtn.onclick = () => {
         fetch('http://localhost:5000/cart/clear', {
           method: 'POST'
-        }).then(() => showCart());
+        }).then(() => {
+          items.forEach(item => item.inCart = 0);
+          showCart()
+        });
       };
       cartDiv.appendChild(clearBtn);
+
+      // Create and add the "Purchase" button
+      const buyBtn = document.createElement('button');
+      buyBtn.textContent = 'Purchase Items';
+      buyBtn.style.marginTop = '10px';
+
+      buyBtn.onclick = () => {
+        const cartItems = items.filter(item => item.inCart > 0);
+
+        if (cartItems.length === 0) {
+          showPopup('Your cart is empty.');
+          return;
+        }
+
+        showSpinner();
+
+        fetch('http://localhost:5000/purchase', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ cart: cartItems })
+        })
+        .then(response => response.json())
+        .then(data => {
+          items.forEach(item => item.inCart = 0);
+          showCart();
+          showPopup(data.message || 'Purchase complete!');
+        })
+        .catch(err => {
+          console.error('Purchase error:', err);
+          showPopup('There was a problem completing your purchase.');
+        })
+        .finally(() => hideSpinner());
+      };
+      cartDiv.appendChild(buyBtn);
     });
 }
 

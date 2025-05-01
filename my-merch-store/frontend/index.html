@@ -58,6 +58,22 @@
     <p id="total"></p>
   </div>
 
+  <!-- Popup for confirmation -->
+  <div id="confirmation-popup" style="display: none;">
+    <div class="popup-content">
+      <p id="popup-message">Thank you for your purchase!</p>
+      <button onclick="closePopup()">OK</button>
+    </div>
+  </div>
+
+  <!-- Loading spinner for purchasing -->
+  <div id="spinner" style="display: none;">
+    <div class="spinner-wrapper">
+      <div class="loader"></div>
+      <p class="spinner-message">Processing your order...</p>
+    </div>
+  </div>
+
   <!-- Chatbot iframe（default hide） -->
   <iframe id="chatbot-frame" src="http://localhost:5002"></iframe>
 
