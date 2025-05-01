@@ -13,7 +13,16 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   box-sizing: border-box;
 }
-
+body {
+  font-family: Arial, sans-serif;
+  background-image: url('https://i.imgur.com/d7WVi4l.jpeg');
+  background-size: cover;
+  background-position: center;
+  margin: 0;
+  padding: 0;
+  color: #333;
+  height: 100vh;
+}
 .top-nav-left {
   display: flex;
   align-items: center;
@@ -67,17 +76,20 @@ body {
 
 /* Game Container */
 .game-container {
-  border: 2px solid #ddd;
+  display: inline-block;
+  vertical-align: top;
+  width: 300px; /* Adjust to fit your design */
+  margin: 10px;
   border-radius: 12px;
   padding: 15px;
-  margin-bottom: 15px;
-  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
-  background-color: #fdfdfd;
+  background-color: rgba(25, 29, 85, 0.75);
   transition: transform 0.2s ease;
+  border: 3px solid #f79d18; 
+  box-shadow: 0 0 12px 3px #f79d18;
+  color: ghostwhite;
 }
 .game-container:hover {
   transform: scale(1.01);
-  box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 /* Game Title */
@@ -100,7 +112,6 @@ body {
 
 /* Review Box */
 .review-box {
-  border: 1px solid #ccc;
   padding: 10px;
   margin-top: 10px;
   display: none;
@@ -118,13 +129,13 @@ body {
   padding: 5px 10px;
   font-size: 16px;
   cursor: pointer;
-  background-color: #007bff;
+  background-color: #f77a35;
   color: white;
   border: none;
   border-radius: 4px;
 }
 .sort-btn:hover {
-  background-color: #0056b3;
+  background-color: #e53e59;
 }
 
 /* Popup Styles */
@@ -153,39 +164,13 @@ body {
   border: none;
 }
 
-/* Rating Star */
-.rating-star {
-  display: inline-block;
-  width: 40px;
-  height: 40px;
-  background: gold;
-  clip-path: polygon(
-    50% 0%, 61% 35%, 98% 35%, 68% 57%,
-    79% 91%, 50% 70%, 21% 91%, 32% 57%,
-    2% 35%, 39% 35%
-  );
-  text-align: center;
-  line-height: 40px;
-  font-weight: bold;
-  color: purple;
-  margin-left: 10px;
-  font-family: Arial, sans-serif;
+#reviews {
+  padding: 20px;
 }
-
-.rating-star {
-  position: relative;
-  text-align: center;
-  line-height: 40px;
-  font-size: 14px;
-  overflow: hidden;
+.game-title {
+  color: white;
 }
-
-.rating-star span {
-  position: absolute;
-  width: 100%;
-  text-align: center;
-  top: 0;
-  left: 0;
-  line-height: 40px;
+.sort-controls {
+  padding-left: 35px;
+  margin-bottom: -30px;
 }
-  

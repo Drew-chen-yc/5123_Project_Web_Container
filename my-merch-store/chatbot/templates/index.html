@@ -4,17 +4,56 @@
     <title>GenAI-Bot</title>
     <link rel="stylesheet" href="../static/style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .boxed {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 80px; /* leave space for fixed input */
+        }
+
+        #chatbox {
+            padding: 20px;
+        }
+
+        #userInput {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #fff;
+            padding: 15px 20px;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        #textInput {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+    </style>
 </head>
 <body>
-<div>
     <div class="boxed">
         <div id="chatbox">
             <p class="botText"><span>Sup. Welcome to the Gamezone, nerd.</span></p>
         </div>
-        <div id="userInput">
-            <input id="textInput" type="text" name="msg" placeholder="Message" />
-        </div>
+    </div>
+
+    <div id="userInput">
+        <input id="textInput" type="text" name="msg" placeholder="Message" />
     </div>
 
     <script>
@@ -38,6 +77,5 @@
             }
         });
     </script>
-</div>
 </body>
 </html>
