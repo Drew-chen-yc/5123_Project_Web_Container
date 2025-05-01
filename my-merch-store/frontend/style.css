@@ -1,5 +1,13 @@
 /* setting background color and web page margin */
 /* Top navigation bar */
+
+@font-face {
+  font-family: 'HeadingNow';
+  src: url('fonts/HeadingNowTrial-66Bold.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 .top-nav {
   position: fixed;
   top: 0;
@@ -27,7 +35,7 @@
 .top-nav-left img {
   height: 40px;
   vertical-align: middle;
-  margin-right: 10px;
+
 }
 
 .top-nav-left h1 {
@@ -47,11 +55,11 @@
 }
 
 .top-nav .merch-link {
-  background-color: orange;
+  background-color: #f77a35;
 }
 
 .top-nav .home-link {
-  background-color: #4CAF50;
+  background-color: #d732bc;
 }
 
 .top-nav a:hover {
@@ -65,7 +73,7 @@ body {
   margin: 0;
   padding: 80px;
   color: #333;
-  height: 100vh;
+  height: 80vh;
 }
 .content-wrapper {
   display: flex;
@@ -100,9 +108,14 @@ body {
 /* Setting title */
 h1, h2 {
   text-align: center;
-  color: #d732bc;
+  font-family: 'HeadingNow', sans-serif;
 }
-
+.container h1 {
+  background: -webkit-linear-gradient(#ef4746, #5b2fe2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-family: 'HeadingNow', sans-serif;
+}
 h2 {
   margin-top: 40px;
   font-size: 1.5em;
@@ -238,7 +251,7 @@ button:hover {
 }
 
 .cart-item button.remove-btn:hover {
-  background-color: #c82333;
+  background-color: #e53e59;
 }
 
 /* small circle button for quantity control */
@@ -257,7 +270,7 @@ button:hover {
 }
 
 .circle-btn:hover {
-  background-color: #218838;
+  background-color: #e53e59;
 }
 
 /* quantity display style */
@@ -322,15 +335,15 @@ button.empty-cart {
 }
 
 button.empty-cart:hover {
-  background-color: #c82333;
+  background-color: #e53e59;
 }
 button.empty-cart:hover {
-  background-color: #c82333;
+  background-color: #e53e59;
 }  
 .cart-window {
   position: fixed;
-  top: 80px;
-  right: 20px;
+  top: 122px;
+  right: 80px;
   width: 300px;
   background-color: white;
   border-radius: 8px;

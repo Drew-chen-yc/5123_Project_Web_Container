@@ -24,7 +24,25 @@ function renderReviews(reviews) {
     title.className = 'game-title';
     title.textContent = item.title;
     title.style.cursor = 'pointer';
+	
+	// Format dates as MM/DD/YYYY
+	function formatDate(dateStr) {
+	  const date = new Date(dateStr);
+	  const mm = String(date.getMonth() + 1).padStart(2, '0');
+	  const dd = String(date.getDate()).padStart(2, '0');
+	  const yyyy = date.getFullYear();
+	  return `${mm}/${dd}/${yyyy}`;
+	}
 
+	const reviewDate = formatDate(item.review_date);
+	const releaseDate = formatDate(item.release_date);
+	
+	const dates = document.createElement('div');
+	dates.className = 'game-dates';
+	dates.innerHTML = `
+	  <p><strong>Reviewed on:</strong> ${reviewDate}</p>
+	  <p><strong>Release date:</strong> ${releaseDate}</p>
+	`;
 	const rating = document.createElement('div');
 	rating.className = 'rating-star';
 
@@ -43,11 +61,12 @@ function renderReviews(reviews) {
     review.style.display = 'none';
 
     // Toggle review visibility
-    title.onclick = () => {
-      review.style.display = review.style.display === 'block' ? 'none' : 'block';
-    };
+	container.onclick = () => {
+	  review.style.display = review.style.display === 'block' ? 'none' : 'block';
+	};
 
     container.appendChild(title);
+	container.appendChild(dates);
     container.appendChild(rating);
     container.appendChild(review);
     reviewsDiv.appendChild(container);
@@ -76,4 +95,64 @@ function sortByAlphabetical() {
   });
   renderReviews(sorted);
   document.getElementById('alpha-sort-icon').textContent = isAlphaAscending ? '↑' : '↓';
+}
+
+let isReviewDateAscending = true;
+let isReleaseDateAscending = true;
+
+function sortByReviewDate() {
+  isReviewDateAscending = !isReviewDateAscending;
+  const sorted = [...reviewsData].sort((a, b) => {
+    const dateA = new Date(a.review_date);
+    const dateB = new Date(b.review_date);
+    return isReviewDateAscending ? dateA - dateB : dateB - dateA;
+  });
+  renderReviews(sorted);
+  document.getElementById('review-date-icon').textContent = isReviewDateAscending ? '↑' : '↓';
+}
+
+function sortByReleaseDate() {
+  isReleaseDateAscending = !isReleaseDateAscending;
+  const sorted = [...reviewsData].sort((a, b) => {
+    const dateA = new Date(a.release_date);
+    const dateB = new Date(b.release_date);
+    return isReleaseDateAscending ? dateA - dateB : dateB - dateA;
+  });
+  renderReviews(sorted);
+  document.getElementById('release-date-icon').textContent = isReleaseDateAscending ? '↑' : '↓';
+}
+
+let sortStates = {
+  rating: false,
+  alphabetical: true,
+  review_date: true,
+  release_date: true,
+};
+
+function handleSortChange() {
+  const sortType = document.getElementById('sort-select').value;
+  sortStates[sortType] = !sortStates[sortType];
+
+  const sorted = [...reviewsData].sort((a, b) => {
+    switch (sortType) {
+      case 'rating':
+        return sortStates.rating ? a.rating - b.rating : b.rating - a.rating;
+      case 'alphabetical':
+        return sortStates.alphabetical
+          ? a.title.localeCompare(b.title)
+          : b.title.localeCompare(a.title);
+      case 'review_date':
+        return sortStates.review_date
+          ? new Date(a.review_date) - new Date(b.review_date)
+          : new Date(b.review_date) - new Date(a.review_date);
+      case 'release_date':
+        return sortStates.release_date
+          ? new Date(a.release_date) - new Date(b.release_date)
+          : new Date(b.release_date) - new Date(a.release_date);
+      default:
+        return 0;
+    }
+  });
+
+  renderReviews(sorted);
 }
