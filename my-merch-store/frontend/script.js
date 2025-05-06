@@ -69,26 +69,45 @@ function displayItems() {
         imageWrapper.appendChild(img);
 
         // If sold out, add overlay
-        if (item.quantity === 0) {
+        const totalQuantity = item.sizes.reduce((sum, s) => sum + s.quantity, 0);
+        if (totalQuantity === 0) {
           const overlay = document.createElement('div');
           overlay.className = 'sold-out-overlay';
           overlay.textContent = 'Sold Out';
           imageWrapper.appendChild(overlay);
         }
-
         div.appendChild(imageWrapper);
 
         // Create and add product name and price
         const p = document.createElement('p');
-        p.textContent = `${item.name} - $${item.price}`;
+        p.textContent = `${item.name}: $${item.price}`;
         div.appendChild(p);
 
-        //const size = document.createElement('p')
+        const hasSizes = item.sizes.some(s => s.size !== "");
 
-        // Add quantity available
-        const qty = document.createElement('p');
-        qty.textContent = `Available: ${item.quantity}`;
-        div.appendChild(qty);
+        if (hasSizes) {
+          // Create size dropdown
+          const dropdown = document.createElement('select');
+          dropdown.className = 'size-dropdown';
+          dropdown.id = `size-select-${item.id}`;
+
+          item.sizes
+            .filter(s => s.size !== "")
+            .forEach(s => {
+              const option = document.createElement('option');
+              option.value = s.size;
+              option.textContent = `${s.size} (${s.quantity} available)`;
+              dropdown.appendChild(option);
+            });
+
+          div.appendChild(dropdown);
+        } else {
+          // Just show total quantity
+          const totalQuantity = item.sizes.reduce((sum, s) => sum + s.quantity, 0);
+          const qty = document.createElement('p');
+          qty.textContent = `Available: ${totalQuantity}`;
+          div.appendChild(qty);
+        }
 
         // Add item description
         const desc = document.createElement('p');
@@ -115,25 +134,66 @@ function displayItems() {
         return item
       });
     });
-};
+}
 
 function updateItemQuantity(item, change) {
-  const newQuantity = item.inCart + change;
+  const sizeSelect = document.querySelector(`#size-select-${item.id}`);
+  const selectedSize = sizeSelect ? sizeSelect.value : "";
 
-  if (newQuantity < 0) return; // Prevent going below 0
-  if (newQuantity > item.quantity) {
-    showPopup(`Only ${item.quantity} in stock`);
-    return; // Prevent going above available stock
+  const sizeInfo = item.sizes.find(s => s.size === selectedSize);
+  if (!sizeInfo) {
+    showPopup("Please select a valid size.");
+    return;
   }
 
-  // Update inCart quantity
-  item.inCart = newQuantity;
+  // Initialize inCart if not yet set per size
+  if (!item.inCartBySize) item.inCartBySize = {};
+  const currentInCart = item.inCartBySize[selectedSize] || 0;
+  const newQuantity = currentInCart + change;
 
-  // Send updated data to the backend
+  if (newQuantity < 0) return;
+  if (newQuantity > sizeInfo.quantity) {
+    showPopup(`Only ${sizeInfo.quantity} in stock for size ${selectedSize}`);
+    return;
+  }
+
+  // Update inCartBySize
+  item.inCartBySize[selectedSize] = newQuantity;
+
+  // Send to backend
   fetch('http://localhost:5001/cart/update', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name: item.name, price: item.price, change })
+    body: JSON.stringify({
+      name: item.name,
+      price: item.price,
+      size: selectedSize,
+      change: change
+    })
+  }).then(() => showCart());
+}
+
+function updateItemQuantityBySize(item, size, change) {
+  const sizeInfo = item.sizes.find(s => s.size === size);
+  if (!sizeInfo) return;
+
+  if (!item.inCartBySize) item.inCartBySize = {};
+  const currentInCart = item.inCartBySize[size] || 0;
+  const newQuantity = currentInCart + change;
+
+  if (newQuantity < 0 || newQuantity > sizeInfo.quantity) return;
+
+  item.inCartBySize[size] = newQuantity;
+
+  fetch('http://localhost:5001/cart/update', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name: item.name,
+      price: item.price,
+      size: size,
+      change: change
+    })
   }).then(() => showCart());
 }
 
@@ -155,44 +215,55 @@ function showCart() {
         const itemDiv = document.createElement('div');
         itemDiv.className = 'cart-item';
 
-        const namePrice = document.createElement('span');
-        namePrice.textContent = `${item.name} - $${item.price} x `;
+        if (item.inCartBySize) {
+          Object.entries(item.inCartBySize).forEach(([size, quantity]) => {
+            if (quantity <= 0) return; // Skip empty entries
 
-        // Create and add the minus button (decrease quantity)
-        const minusBtn = document.createElement('button');
-        minusBtn.className = 'circle-btn';
-        minusBtn.id = `minus-btn-${item.id}`;  // Unique ID for easy reference
-        minusBtn.textContent = '-';
-        minusBtn.onclick = () => updateItemQuantity(item, -1);
+            const namePrice = document.createElement('span');
+            const sizeLabel = size ? ` (Size: ${size})` : '';
+            namePrice.textContent = `${item.name}${sizeLabel} - $${item.price} x `;
 
-        // Quantity display
-        const qtyDisplay = document.createElement('span');
-        qtyDisplay.className = 'qty-display';
-        qtyDisplay.textContent = item.inCart;
+            // Create minus button
+            const minusBtn = document.createElement('button');
+            minusBtn.className = 'circle-btn';
+            minusBtn.textContent = '-';
+            minusBtn.onclick = () => updateItemQuantityBySize(item, size, -1);
 
-        // Create and add the plus button (increase quantity)
-        const plusBtn = document.createElement('button');
-        plusBtn.className = 'circle-btn';
-        plusBtn.id = `plus-btn-${item.id}`;  // Unique ID for easy reference
-        plusBtn.textContent = '+';
+            // Quantity display
+            const qtyDisplay = document.createElement('span');
+            qtyDisplay.className = 'qty-display';
+            qtyDisplay.textContent = quantity;
 
-        // Disable plus button if item.inCart >= item.quantity
-        if (item.inCart >= item.quantity) {
-          plusBtn.disabled = true;
-          plusBtn.classList.add('disabled-btn');
-        } else {
-          plusBtn.onclick = () => updateItemQuantity(item, 1);
+            // Create plus button
+            const plusBtn = document.createElement('button');
+            plusBtn.className = 'circle-btn';
+            plusBtn.textContent = '+';
+            plusBtn.onclick = () => updateItemQuantityBySize(item, size, 1);
+
+            const sizeInfo = item.sizes.find(s => s.size === size);
+            const availableQty = sizeInfo ? sizeInfo.quantity : 0;
+
+            // Disable plus button if item.inCart >= item.quantity
+            if (quantity >= availableQty) {
+              plusBtn.disabled = true;
+              plusBtn.classList.add('disabled-btn');
+            } else {
+              plusBtn.onclick = () => updateItemQuantityBySize(item, size, 1);
+            }
+
+            // Wrap into cart item
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'cart-item';
+            itemDiv.appendChild(namePrice);
+            itemDiv.appendChild(minusBtn);
+            itemDiv.appendChild(qtyDisplay);
+            itemDiv.appendChild(plusBtn);
+
+            cartDiv.appendChild(itemDiv);
+
+            total += item.price * quantity;
+          });
         }
-
-        // Append all the elements to the cart item div
-        itemDiv.appendChild(namePrice);
-        itemDiv.appendChild(minusBtn);
-        itemDiv.appendChild(qtyDisplay);
-        itemDiv.appendChild(plusBtn);
-
-        cartDiv.appendChild(itemDiv);
-
-        total += item.price * item.inCart;
       });
 
       // Display the total price
@@ -211,8 +282,10 @@ function showCart() {
         fetch('http://localhost:5001/cart/clear', {
           method: 'POST'
         }).then(() => {
-          items.forEach(item => item.inCart = 0);
-          showCart()
+          items.forEach(item => {
+            item.inCartBySize = {}; // Reset all in-cart quantities by size
+          });
+          showCart();
         });
       };
       cartDiv.appendChild(clearBtn);
@@ -223,7 +296,23 @@ function showCart() {
       buyBtn.style.marginTop = '10px';
 
       buyBtn.onclick = () => {
-        const cartItems = items.filter(item => item.inCart > 0);
+        // Flatten cart into list of { name, size, price, quantity }
+        const cartItems = [];
+
+        items.forEach(item => {
+          if (item.inCartBySize) {
+            for (const [size, quantity] of Object.entries(item.inCartBySize)) {
+              if (quantity > 0) {
+                cartItems.push({
+                  name: item.name,
+                  size,
+                  price: item.price,
+                  quantity
+                });
+              }
+            }
+          }
+        });
 
         if (cartItems.length === 0) {
           showPopup('Your cart is empty.');
@@ -239,7 +328,9 @@ function showCart() {
         })
         .then(response => response.json())
         .then(data => {
-          items.forEach(item => item.inCart = 0);
+          items.forEach(item => {
+            item.inCartBySize = {};
+          });
           showCart();
           showPopup(data.message || 'Purchase complete!');
           displayItems();

@@ -41,7 +41,7 @@ class Inventory(db.Model):
     __tablename__ = 'inventory'
     merch_id: Mapped[int] = mapped_column(db.ForeignKey('merch.id'), primary_key=True)
     quantity: Mapped[int]
-    size: Mapped[str]
+    size: Mapped[str] = mapped_column(primary_key=True)
 
     def __repr__(self) -> str:
         return f"Inventory(merch_id={self.merch_id!r}, quantity={self.quantity!r})"
@@ -62,19 +62,21 @@ class Reviews(db.Model):
 
 @app.route('/items')
 def items():
-    merch = db.session.query(Merch).join(Merch.inventory).all()
+    merch_items = db.session.query(Merch).all()
 
-    # Convert the list of Merch objects into dictionaries
     merch_list = []
-    for item in merch:
+    for item in merch_items:
+        # Group all inventory entries for this merch item
+        sizes = db.session.query(Inventory).filter_by(merch_id=item.id).all()
+        size_list = [{'size': s.size, 'quantity': s.quantity} for s in sizes]
+
         merch_list.append({
             'id': item.id,
             'name': item.name,
             'price': item.price,
             'picture': item.picture,
             'description': item.description,
-            'quantity' : item.inventory.quantity,
-            'size': item.inventory.size
+            'sizes': size_list  # This is an array of available sizes with quantities
         })
 
     return jsonify(merch_list)
@@ -103,17 +105,17 @@ def reviews():
 def handle_cart():
     if request.method == 'POST':
         item = request.json
-        existing_item = next((i for i in cart if i['name'] == item['name']), None)
+        existing_item = next((i for i in cart if i['name'] == item['name'] and i['size'] == item['size']), None)
+
         if existing_item:
-            existing_item['inCart'] += 1
+            existing_item['quantity'] += 1
         else:
-            item['inCart'] = 1
+            item['quantity'] = 1
             cart.append(item)
+
         return jsonify({'message': 'Item added to cart'}), 201
 
     elif request.method == 'DELETE':
-        item = request.json
-        item['inCart'] = 0
         cart.clear()
         return jsonify({'message': 'Cart cleared'}), 200
 
@@ -150,9 +152,10 @@ def buy_cart():
 
     for item_data in cart_items:
         name = item_data['name']
-        in_cart = item_data['inCart']
+        size = item_data['size']
+        quantity = item_data['quantity']
 
-        # Get the item from the database
+        # Find the merch item
         merch_item = db.session.execute(
             db.select(Merch).where(Merch.name == name)
         ).scalar_one_or_none()
@@ -160,17 +163,28 @@ def buy_cart():
         if merch_item is None:
             return jsonify({'error': f'Item {name} not found'}), 404
 
-        if in_cart > merch_item.inventory.quantity:
-            return jsonify({'error': f'Not enough stock for {name}'}), 400
+        # Find the inventory record matching size
+        inventory_record = db.session.execute(
+            db.select(Inventory)
+            .where(Inventory.merch_id == merch_item.id)
+            .where(Inventory.size == size)
+        ).scalar_one_or_none()
 
-        # Subtract quantity
-        merch_item.inventory.quantity -= in_cart
+        if inventory_record is None:
+            return jsonify({'error': f'Size {size} for {name} not found'}), 404
 
-    # Commit the updates to the database
+        if quantity > inventory_record.quantity:
+            return jsonify({'error': f'Not enough stock for {name} size {size}'}), 400
+
+        # Subtract the quantity
+        inventory_record.quantity -= quantity
+
+    # Commit all updates
     db.session.commit()
-
     cart.clear()
+
     return jsonify({'message': 'Thank you for your purchase!'}), 200
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001)
