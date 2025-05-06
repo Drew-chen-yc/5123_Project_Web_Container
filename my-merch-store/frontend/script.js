@@ -88,6 +88,11 @@ function displayItems() {
         qty.textContent = `Available: ${item.quantity}`;
         div.appendChild(qty);
 
+        // Add item description
+        const desc = document.createElement('p');
+        desc.textContent = `${item.description}`;
+        div.appendChild(desc);
+
         // Create and add Add to Cart button
         const btn = document.createElement('button');
         btn.innerHTML = '<i class="fas fa-cart-plus"></i>';  // sets HTML, allowing emojis or even <img>/<svg> icons

@@ -170,8 +170,8 @@ COPY public.merch (id, name, category, price, picture, description) FROM stdin;
 1	T-Shirt	Apparel	20	shirt.png	This cotton unisex tee is perfect for wiping your cheese puff-stained fingers on during a long gaming sesh. Game on!
 2	Hat	Apparel	10	hat.png	What better to wear than a GAMEZONE hat to rep your gaming cred?
 3	Sticker	Accessories	2	sticker.png	Show everyone that you, indeed, are a True Gamer.
-4	Mousepad	Accessories	5	mousepad.png	Don't have one of those huge new mousepads? Fret not?the GAMEZONE has you covered. Frag everyone!
-5	Drink Coozie	Accessories	6	coozie.png	Keep your Gaming Fuel nice and chill with this GAMEZONE coozy.
+4	Mousepad	Accessories	5	mousepad.png	Don't have one of those huge new mousepads? Fret not—the GAMEZONE has you covered. Frag everyone!
+5	Drink Coozi	Accessories	6	coozi.png	Keep your Gaming Fuel nice and chill with this GAMEZONE coozi.
 6	Blanket	Accessories	40	blanket.png	Gaming on a cold day? Wrap your body with this GAMEZONE blanket to add 50% cold resistance!
 7	Hoodie	Apparel	50	hoodie.png	With this premium cotton hoodie, you will be a Certified Gaming God. The GAMEZONE is yours to command.
 \.
