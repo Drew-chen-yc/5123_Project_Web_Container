@@ -1,4 +1,5 @@
 let items = []; // Track all items and their in-cart state
+let popupTimeoutId = null;
 
 const toggleBtn = document.getElementById("chat-toggle-btn");
 const chatFrame = document.getElementById("chatbot-frame");
@@ -25,7 +26,12 @@ function showPopup(message, duration = 3000) {
   popup.classList.remove('fade-out');
   popup.style.display = 'flex';
 
-  setTimeout(() => {
+  // Clear any previous timeout
+  if (popupTimeoutId) {
+    clearTimeout(popupTimeoutId);
+  }
+
+  popupTimeoutId = setTimeout(() => {
     popup.classList.add('fade-out');
 
     // Fully hide after fade-out completes
@@ -38,6 +44,11 @@ function showPopup(message, duration = 3000) {
 function closePopup() {
   const popup = document.getElementById('confirmation-popup');
   popup.classList.add('fade-out');
+
+  if (popupTimeoutId) {
+    clearTimeout(popupTimeoutId);
+    popupTimeoutId = null;
+  }
 
   setTimeout(() => {
     popup.style.display = 'none';
