@@ -193,6 +193,7 @@ toggleBtn.addEventListener("click", () => {
 });
 
 window.addEventListener("load", () => {
+  document.getElementById('released-filter-btn').addEventListener('click', filterReleasedItems);
   const noticeDisplayed = localStorage.getItem("chat_notice_shown");
 
   if (!noticeDisplayed) {
