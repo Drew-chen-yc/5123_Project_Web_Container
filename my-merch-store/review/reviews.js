@@ -2,6 +2,7 @@
 let isAscending = false;
 let isAlphaAscending = true;
 let reviewsData = [];
+let isFilterActive = false;
 
 const toggleBtn = document.getElementById("chat-toggle-btn");
 const chatFrame = document.getElementById("chatbot-frame");
@@ -160,6 +161,21 @@ function handleSortChange() {
   renderReviews(sorted);
 }
 
+
+function filterReleasedItems() {
+  isFilterActive = !isFilterActive;
+
+  if (isFilterActive) {
+    const now = new Date();
+    const releasedItems = reviewsData.filter(item => new Date(item.release_date) <= now);
+    renderReviews(releasedItems);
+    document.getElementById('released-filter-btn').textContent = "❌Filter Released";
+  } else {
+    renderReviews(reviewsData);
+    document.getElementById('released-filter-btn').textContent = "Filter Released";
+  }
+}
+
 toggleBtn.addEventListener("click", () => {
   // Hide or show the chatbot frame
   if (chatFrame.style.display === "block") {
@@ -177,6 +193,7 @@ toggleBtn.addEventListener("click", () => {
 });
 
 window.addEventListener("load", () => {
+  document.getElementById('released-filter-btn').addEventListener('click', filterReleasedItems);
   const noticeDisplayed = localStorage.getItem("chat_notice_shown");
 
   if (!noticeDisplayed) {

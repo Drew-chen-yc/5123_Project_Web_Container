@@ -54,6 +54,8 @@ class Reviews(db.Model):
     review: Mapped[str]
     release_date: Mapped[str]
     review_date: Mapped[str]
+    category: Mapped[str]
+    link: Mapped[str]
 
     def __repr__(self) -> str:
         return f"Reviews(title={self.title!r}, rating={self.rating!r})"
@@ -90,7 +92,9 @@ def reviews():
             'rating': review.rating,
             'review': review.review,
             'release_date': review.release_date,
-            'review_date': review.review_date
+            'review_date': review.review_date,
+            'category': review.category,
+            'link': review.link
         })
 
     return jsonify(reviews_list)
