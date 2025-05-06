@@ -3,6 +3,9 @@ let isAscending = false;
 let isAlphaAscending = true;
 let reviewsData = [];
 
+const toggleBtn = document.getElementById("chat-toggle-btn");
+const chatFrame = document.getElementById("chatbot-frame");
+
 // Fetch the review data from the server
 fetch('http://localhost:5001/reviews')
   .then(response => response.json())
@@ -156,3 +159,50 @@ function handleSortChange() {
 
   renderReviews(sorted);
 }
+
+toggleBtn.addEventListener("click", () => {
+  // Hide or show the chatbot frame
+  if (chatFrame.style.display === "block") {
+    chatFrame.style.display = "none";
+  } else {
+    chatFrame.style.display = "block";
+  }
+
+  // Remove chatbot notice if it's still showing
+    const notice = document.getElementById("chatbot-notice");
+    if (notice) {
+      notice.remove();
+      localStorage.setItem("chat_notice_shown", "true");
+    }
+});
+
+window.addEventListener("load", () => {
+  const noticeDisplayed = localStorage.getItem("chat_notice_shown");
+
+  if (!noticeDisplayed) {
+    const notice = document.createElement("div");
+    notice.textContent = "🤖 This is a chatbot. Click the button in the bottom-right corner to start chatting!";
+    notice.style.position = "fixed";
+    notice.style.bottom = "100px";
+    notice.style.right = "20px";
+    notice.style.backgroundColor = "#0078D4";
+    notice.style.color = "white";
+    notice.style.padding = "12px 16px";
+    notice.style.borderRadius = "10px";
+    notice.style.boxShadow = "0 2px 10px rgba(0,0,0,0.2)";
+    notice.style.zIndex = 10001;
+    notice.style.transition = "opacity 1s ease";
+    notice.id = "chatbot-notice";
+    document.body.appendChild(notice);
+
+    setTimeout(() => {
+      notice.style.opacity = "0";
+      setTimeout(() => {
+        notice.remove();
+      }, 1000);
+    }, 5000);
+
+    // Set the localStorage flag so it's never shown again
+    localStorage.setItem("chat_notice_shown", "true");
+  }
+});

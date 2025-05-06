@@ -1,6 +1,4 @@
 let items = []; // Track all items and their in-cart state
-let noticeDisplayed = false
-let notice = null; // Global reference
 
 const toggleBtn = document.getElementById("chat-toggle-btn");
 const chatFrame = document.getElementById("chatbot-frame");
@@ -252,17 +250,6 @@ function showCart() {
 displayItems();
 showCart();
 
-// Function to remove notice
-function dismissNotice() {
-  if (notice) {
-    notice.style.opacity = "0";
-    setTimeout(() => {
-      if (notice) notice.remove();
-      notice = null;
-    }, 1000);
-  }
-}
-
 toggleBtn.addEventListener("click", () => {
   // Hide or show the chatbot frame
   if (chatFrame.style.display === "block") {
@@ -271,14 +258,19 @@ toggleBtn.addEventListener("click", () => {
     chatFrame.style.display = "block";
   }
 
-  // Dismiss the notice when chat button is clicked
-  dismissNotice();
+  // Remove chatbot notice if it's still showing
+    const notice = document.getElementById("chatbot-notice");
+    if (notice) {
+      notice.remove();
+      localStorage.setItem("chat_notice_shown", "true");
+    }
 });
 
-// Chatbot notice (only display once)
 window.addEventListener("load", () => {
+  const noticeDisplayed = localStorage.getItem("chat_notice_shown");
+
   if (!noticeDisplayed) {
-    notice = document.createElement("div");
+    const notice = document.createElement("div");
     notice.textContent = "🤖 This is a chatbot. Click the button in the bottom-right corner to start chatting!";
     notice.style.position = "fixed";
     notice.style.bottom = "100px";
@@ -290,12 +282,17 @@ window.addEventListener("load", () => {
     notice.style.boxShadow = "0 2px 10px rgba(0,0,0,0.2)";
     notice.style.zIndex = 10001;
     notice.style.transition = "opacity 1s ease";
+    notice.id = "chatbot-notice";
     document.body.appendChild(notice);
 
     setTimeout(() => {
-      dismissNotice();
+      notice.style.opacity = "0";
+      setTimeout(() => {
+        notice.remove();
+      }, 1000);
     }, 5000);
 
-    noticeDisplayed = true;
+    // Set the localStorage flag so it's never shown again
+    localStorage.setItem("chat_notice_shown", "true");
   }
 });
