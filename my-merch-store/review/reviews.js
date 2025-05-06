@@ -64,6 +64,21 @@ function renderReviews(reviews) {
     review.textContent = item.review;
     review.style.display = 'none';
 
+    const linkButton = document.createElement('a');
+    linkButton.href = item.link;
+    linkButton.className = 'visit-link-btn';
+    linkButton.target = '_blank';
+    linkButton.rel = 'noopener noreferrer';
+
+    // Create logo image
+    const steamLogo = document.createElement('img');
+    steamLogo.src = 'https://cdn.freebiesupply.com/images/large/2x/steam-logo-transparent.png'; // or other logo
+    steamLogo.alt = 'Steam Logo';
+    steamLogo.className = 'steam-logo';
+
+    // Create text node
+    const buttonText = document.createTextNode('Buy on Steam');
+	  
     // Toggle review visibility
 	container.onclick = () => {
 	  review.style.display = review.style.display === 'block' ? 'none' : 'block';
@@ -73,6 +88,9 @@ function renderReviews(reviews) {
 	container.appendChild(dates);
     container.appendChild(rating);
     container.appendChild(review);
+    container.appendChild(linkButton);
+    linkButton.appendChild(steamLogo);
+    linkButton.appendChild(buttonText);
     reviewsDiv.appendChild(container);
   });
 }
