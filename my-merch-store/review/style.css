@@ -267,3 +267,18 @@ body {
 .game-container {
   cursor: pointer;
 }
+
+div.review-item.game-container a:-webkit-any-link{
+	color: orange;
+}
+.sort-controls button#released-filter-btn {
+  font-size: 16px;
+  padding: 5px 10px;
+  margin-left: 10px;
+  border-radius: 4px;
+  background-color: #f0f0f0;
+  color: #333;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  appearance: none; /* removes native styling differences */
+}

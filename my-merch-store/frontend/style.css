@@ -101,7 +101,8 @@ body {
   background-image: url('https://i.imgur.com/d7WVi4l.jpeg');
   background-size: cover;
   background-position: center;
-  background-repeat: space;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   margin: 0;
   padding: 80px;
   color: #333;
@@ -447,4 +448,20 @@ button.empty-cart:hover {
   font-size: 1.2em;
   text-align: center;
   color: #444;
+}
+.size-dropdown {
+  font-size: 16px;
+  padding: 5px 10px;
+  margin-left: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background-color: white;
+  color: #333;
+  cursor: pointer;
+  outline: none;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  appearance: none;         /* Remove default dropdown arrow in Chrome/Safari */
+  -webkit-appearance: none; /* Safari fix */
+  -moz-appearance: none;    /* Firefox fix */
 }
