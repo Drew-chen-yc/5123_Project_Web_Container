@@ -83,6 +83,8 @@ function displayItems() {
         p.textContent = `${item.name} - $${item.price}`;
         div.appendChild(p);
 
+        //const size = document.createElement('p')
+
         // Add quantity available
         const qty = document.createElement('p');
         qty.textContent = `Available: ${item.quantity}`;
