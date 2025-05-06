@@ -28,8 +28,10 @@ class Merch(db.Model):
     __tablename__ = 'merch'
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str]
+    category: Mapped[str]
     price: Mapped[float]
     picture: Mapped[str]
+    description: Mapped[str]
     inventory = db.relationship("Inventory", backref="merch", uselist=False)
 
     def __repr__(self) -> str:
@@ -39,6 +41,7 @@ class Inventory(db.Model):
     __tablename__ = 'inventory'
     merch_id: Mapped[int] = mapped_column(db.ForeignKey('merch.id'), primary_key=True)
     quantity: Mapped[int]
+    size: Mapped[str]
 
     def __repr__(self) -> str:
         return f"Inventory(merch_id={self.merch_id!r}, quantity={self.quantity!r})"
@@ -67,7 +70,9 @@ def items():
             'name': item.name,
             'price': item.price,
             'picture': item.picture,
-            'quantity' : item.inventory.quantity
+            'description': item.description,
+            'quantity' : item.inventory.quantity,
+            'size': item.inventory.size
         })
 
     return jsonify(merch_list)

@@ -5,7 +5,7 @@
 -- Dumped from database version 17.4
 -- Dumped by pg_dump version 17.4
 
--- Started on 2025-04-30 19:09:15
+-- Started on 2025-05-06 14:38:39
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -30,7 +30,8 @@ SET default_table_access_method = heap;
 
 CREATE TABLE public.inventory (
     merch_id integer NOT NULL,
-    quantity integer
+    quantity integer,
+    size character varying(50) NOT NULL
 );
 
 
@@ -44,8 +45,10 @@ ALTER TABLE public.inventory OWNER TO storefront;
 CREATE TABLE public.merch (
     id integer NOT NULL,
     name character varying(90),
-    price numeric(10,2),
-    picture character varying
+    category character varying(50),
+    price numeric,
+    picture character varying(50),
+    description character varying
 );
 
 
@@ -140,10 +143,18 @@ ALTER TABLE ONLY public.reviews ALTER COLUMN id SET DEFAULT nextval('public.revi
 -- Data for Name: inventory; Type: TABLE DATA; Schema: public; Owner: storefront
 --
 
-COPY public.inventory (merch_id, quantity) FROM stdin;
-1	5
-2	2
-3	20
+COPY public.inventory (merch_id, quantity, size) FROM stdin;
+1	4	Large
+1	3	X-Large
+2	2	One Size
+3	20	
+4	14	
+5	7	
+6	4	Queen
+6	3	King
+7	13	Medium
+7	2	Large
+7	3	X-Large
 \.
 
 
@@ -153,10 +164,14 @@ COPY public.inventory (merch_id, quantity) FROM stdin;
 -- Data for Name: merch; Type: TABLE DATA; Schema: public; Owner: storefront
 --
 
-COPY public.merch (id, name, price, picture) FROM stdin;
-1	T-Shirt	20.00	shirt.png
-2	Hat	10.00	hat.png
-3	Sticker	2.00	sticker.png
+COPY public.merch (id, name, category, price, picture, description) FROM stdin;
+1	T-Shirt	Apparel	20	shirt.png	This cotton unisex tee is perfect for wiping your cheese puff-stained fingers on during a long gaming sesh. Game on!
+2	Hat	Apparel	10	hat.png	What better to wear than a GAMEZONE hat to rep your gaming cred?
+3	Sticker	Accessories	2	sticker.png	Show everyone that you, indeed, are a True Gamer.
+4	Mousepad	Accessories	5	mousepad.png	Don't have one of those huge new mousepads? Fret not—the GAMEZONE has you covered. Frag everyone!
+5	Drink Coozi	Accessories	6	coozi.png	Keep your Gaming Fuel nice and chill with this GAMEZONE coozi.
+6	Blanket	Accessories	40	blanket.png	Gaming on a cold day? Wrap your body with this GAMEZONE blanket to add 50% cold resistance!
+7	Hoodie	Apparel	50	hoodie.png	With this premium cotton hoodie, you will be a Certified Gaming God. The GAMEZONE is yours to command.
 \.
 
 
@@ -199,21 +214,21 @@ SELECT pg_catalog.setval('public.reviews_id_seq', 1, false);
 
 
 --
--- TOC entry 4755 (class 2606 OID 16443)
--- Name: inventory inventory_merch_id_primarykey; Type: CONSTRAINT; Schema: public; Owner: storefront
---
-
-ALTER TABLE ONLY public.inventory
-    ADD CONSTRAINT inventory_merch_id_primarykey PRIMARY KEY (merch_id);
-
-
---
 -- TOC entry 4757 (class 2606 OID 16426)
 -- Name: merch merchid_primarykey; Type: CONSTRAINT; Schema: public; Owner: storefront
 --
 
 ALTER TABLE ONLY public.merch
     ADD CONSTRAINT merchid_primarykey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 4755 (class 2606 OID 16451)
+-- Name: inventory merchid_size_inventory_primarykey; Type: CONSTRAINT; Schema: public; Owner: storefront
+--
+
+ALTER TABLE ONLY public.inventory
+    ADD CONSTRAINT merchid_size_inventory_primarykey PRIMARY KEY (merch_id, size);
 
 
 --
@@ -242,7 +257,7 @@ ALTER TABLE ONLY public.inventory
     ADD CONSTRAINT merchid_inventory_foreign_key FOREIGN KEY (merch_id) REFERENCES public.merch(id) NOT VALID;
 
 
--- Completed on 2025-04-30 19:09:16
+-- Completed on 2025-05-06 14:38:39
 
 --
 -- storefrontQL database dump complete
