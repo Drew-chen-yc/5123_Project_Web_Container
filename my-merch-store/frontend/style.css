@@ -101,6 +101,7 @@ body {
   background-image: url('https://i.imgur.com/d7WVi4l.jpeg');
   background-size: cover;
   background-position: center;
+  background-repeat: space;
   margin: 0;
   padding: 80px;
   color: #333;
@@ -168,6 +169,8 @@ h2 {
   text-align: center;
   border: 3px solid #f79d18; 
   box-shadow: 0 0 12px 3px #f79d18;
+  display: flex;
+  flex-direction: column;
 }
 
 .product-image {
@@ -201,8 +204,14 @@ h2 {
   font-size: 1.1em;
   margin: 0;
   color: white;
-}
 
+}
+.items-list p:last-of-type {
+  padding-bottom: 20px; 
+}
+.items-list p:first-of-type {
+  margin-top: -10px; 
+}
 .image-wrapper {
   position: relative;
   width: 100%;
@@ -272,6 +281,7 @@ button {
   border-radius: 5px;
   width: 100%;
   font-size: 1.1em;
+  margin-top: auto;
 }
 
 button:hover {
